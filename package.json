@@ -58,7 +58,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run test:nowatch pretty-quick --staged"
+      "pre-commit": "npm run test:nowatch && pretty-quick --staged"
     }
   }
 }
