@@ -1,11 +1,27 @@
 {
-  "extends": ["react-app", "plugin: prettier/recommended", "prettier"],
+  "plugins": ["prettier", "jsx-a11y", "react", "react-hooks", "import"],
+  "extends": [
+    "react-app",
+    "plugin:jsx-a11y/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "eslint:recommended",
+    "plugin:prettier/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings"
+  ],
   "rules": {
     "prettier/prettier": "error"
   },
   "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaFeatures": { "jsx": true },
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
   "env": {
     "browser": true,
-    "jest": true
+    "jest": true,
+    "es6": true
   }
 }
