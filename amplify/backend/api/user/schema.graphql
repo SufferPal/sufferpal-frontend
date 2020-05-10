@@ -3,4 +3,5 @@ type User @model {
   firstName: String!
   lastName: String!
   email: String!
+  phoneNumber: String
 }
