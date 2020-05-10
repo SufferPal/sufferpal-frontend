@@ -8,6 +8,7 @@ export const onCreateUser = /* GraphQL */ `
       firstName
       lastName
       email
+      phoneNumber
     }
   }
 `;
@@ -18,6 +19,7 @@ export const onUpdateUser = /* GraphQL */ `
       firstName
       lastName
       email
+      phoneNumber
     }
   }
 `;
@@ -28,6 +30,7 @@ export const onDeleteUser = /* GraphQL */ `
       firstName
       lastName
       email
+      phoneNumber
     }
   }
 `;

@@ -8,6 +8,7 @@ export const getUser = /* GraphQL */ `
       firstName
       lastName
       email
+      phoneNumber
     }
   }
 `;
@@ -19,6 +20,7 @@ export const listUsers = /* GraphQL */ `
         firstName
         lastName
         email
+        phoneNumber
       }
       nextToken
     }
