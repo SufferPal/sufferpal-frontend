@@ -1,8 +1,14 @@
 import React from 'react';
 import DefaultTemplate from '../../templates/DefaultTemplate/DefaultTemplate';
+import Upload from '../../components/Upload/Upload';
 
 const HomePage = () => {
-  return <DefaultTemplate>HomePage</DefaultTemplate>;
+  return (
+    <DefaultTemplate>
+      HomePage
+      <Upload />
+    </DefaultTemplate>
+  );
 };
 
 export default HomePage;
