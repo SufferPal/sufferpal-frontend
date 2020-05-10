@@ -8,6 +8,7 @@ export const createUser = /* GraphQL */ `
       firstName
       lastName
       email
+      phoneNumber
     }
   }
 `;
@@ -18,6 +19,7 @@ export const updateUser = /* GraphQL */ `
       firstName
       lastName
       email
+      phoneNumber
     }
   }
 `;
@@ -28,6 +30,61 @@ export const deleteUser = /* GraphQL */ `
       firstName
       lastName
       email
+      phoneNumber
+    }
+  }
+`;
+export const createActivity = /* GraphQL */ `
+  mutation CreateActivity($input: CreateActivityInput!, $condition: ModelActivityConditionInput) {
+    createActivity(input: $input, condition: $condition) {
+      id
+      totalCalories
+      startTime
+      totalMovingTime
+      maxCadence
+      minHeartRate
+      avgSpeed
+      maxHeartRate
+      totalDistance
+      avgCadence
+      avgHeartRate
+      sport
+    }
+  }
+`;
+export const updateActivity = /* GraphQL */ `
+  mutation UpdateActivity($input: UpdateActivityInput!, $condition: ModelActivityConditionInput) {
+    updateActivity(input: $input, condition: $condition) {
+      id
+      totalCalories
+      startTime
+      totalMovingTime
+      maxCadence
+      minHeartRate
+      avgSpeed
+      maxHeartRate
+      totalDistance
+      avgCadence
+      avgHeartRate
+      sport
+    }
+  }
+`;
+export const deleteActivity = /* GraphQL */ `
+  mutation DeleteActivity($input: DeleteActivityInput!, $condition: ModelActivityConditionInput) {
+    deleteActivity(input: $input, condition: $condition) {
+      id
+      totalCalories
+      startTime
+      totalMovingTime
+      maxCadence
+      minHeartRate
+      avgSpeed
+      maxHeartRate
+      totalDistance
+      avgCadence
+      avgHeartRate
+      sport
     }
   }
 `;

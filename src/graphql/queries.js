@@ -8,6 +8,7 @@ export const getUser = /* GraphQL */ `
       firstName
       lastName
       email
+      phoneNumber
     }
   }
 `;
@@ -19,6 +20,46 @@ export const listUsers = /* GraphQL */ `
         firstName
         lastName
         email
+        phoneNumber
+      }
+      nextToken
+    }
+  }
+`;
+export const getActivity = /* GraphQL */ `
+  query GetActivity($id: ID!) {
+    getActivity(id: $id) {
+      id
+      totalCalories
+      startTime
+      totalMovingTime
+      maxCadence
+      minHeartRate
+      avgSpeed
+      maxHeartRate
+      totalDistance
+      avgCadence
+      avgHeartRate
+      sport
+    }
+  }
+`;
+export const listActivitys = /* GraphQL */ `
+  query ListActivitys($filter: ModelActivityFilterInput, $limit: Int, $nextToken: String) {
+    listActivitys(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        totalCalories
+        startTime
+        totalMovingTime
+        maxCadence
+        minHeartRate
+        avgSpeed
+        maxHeartRate
+        totalDistance
+        avgCadence
+        avgHeartRate
+        sport
       }
       nextToken
     }

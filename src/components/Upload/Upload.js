@@ -1,5 +1,8 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { API, graphqlOperation } from 'aws-amplify';
+import { createActivity } from '../../graphql/mutations';
+import { getActivity } from '../../graphql/queries';
 // Require the module
 import FitParser from 'fit-file-parser';
 // // Read a .FIT file
@@ -51,9 +54,46 @@ const Upload = () => {
   }, []);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
+  const addActivity = async (activity) => {
+    await API.graphql(graphqlOperation(createActivity, { input: activity }));
+  };
+
+  // useEffect(() => {
+  //   fetchActivity();
+  // }, []);
+
+  // const fetchActivity = async () => {
+  //   const activityData = await API.graphql(
+  //     graphqlOperation(getActivity, { id: '3ac0b53c-39d0-4e6f-b50c-ecff62bc11a4' })
+  //   );
+  //   console.log(activityData.data.getActivity.records);
+  // }
+
   useEffect(() => {
-    console.log(activity);
+    const customActivityData = {};
+
+    //console.log(activity);
+    //console.log(activity.sessions);
     //console.log(activity?.activity?.sessions[0].total_distance);
+    if (activity?.sessions) {
+      customActivityData['totalCalories'] = activity?.sessions[0]?.total_calories;
+      customActivityData['startTime'] = activity?.sessions[0]?.start_time;
+      customActivityData['totalMovingTime'] = activity?.sessions[0]?.total_moving_time;
+      customActivityData['maxCadence'] = activity?.sessions[0]?.max_cadence;
+      customActivityData['minHeartRate'] = activity?.sessions[0]?.min_heart_rate;
+      customActivityData['avgSpeed'] = activity?.sessions[0]?.avg_speed;
+      customActivityData['maxHeartRate'] = activity?.sessions[0]?.max_heart_rate;
+      customActivityData['totalDistance'] = activity?.sessions[0]?.total_distance;
+      customActivityData['avgCadence'] = activity?.sessions[0]?.avg_cadence;
+      customActivityData['sport'] = activity?.sessions[0]?.sport;
+      customActivityData['avgHeartRate'] = activity?.sessions[0]?.avg_heart_rate;
+    }
+
+    //customActivityData['records'] = activity?.records?.toString();
+
+    addActivity(customActivityData);
+
+    //console.log(customActivityData);
   }, [activity]);
 
   return (
