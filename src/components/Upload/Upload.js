@@ -52,8 +52,28 @@ const Upload = () => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   useEffect(() => {
+    const customActivityData = {};
+
     console.log(activity);
+    console.log(activity.sessions);
     //console.log(activity?.activity?.sessions[0].total_distance);
+    if (activity?.sessions) {
+      customActivityData['totalCalories'] = activity?.sessions[0]?.total_calories;
+      customActivityData['startTime'] = activity?.sessions[0]?.start_time;
+      customActivityData['totalMovingTime'] = activity?.sessions[0]?.total_moving_time;
+      customActivityData['maxCadence'] = activity?.sessions[0]?.max_cadence;
+      customActivityData['minHeartRate'] = activity?.sessions[0]?.min_heart_rate;
+      customActivityData['avgSpeed'] = activity?.sessions[0]?.avg_speed;
+      customActivityData['maxHeartRate'] = activity?.sessions[0]?.max_heart_rate;
+      customActivityData['totalDistance'] = activity?.sessions[0]?.total_distance;
+      customActivityData['avgCadence'] = activity?.sessions[0]?.avg_cadence;
+      customActivityData['sport'] = activity?.sessions[0]?.sport;
+      customActivityData['avgHeartRate'] = activity?.sessions[0]?.avg_heart_rate;
+    }
+
+    customActivityData['records'] = activity?.records;
+
+    console.log(customActivityData);
   }, [activity]);
 
   return (
