@@ -5,3 +5,18 @@ type User @model {
   email: String!
   phoneNumber: String
 }
+
+type Activity @model {
+  id: ID!
+  totalCalories: Float!
+  startTime: String!
+  totalMovingTime: Float!
+  maxCadence: Float!
+  minHeartRate: Float!
+  avgSpeed: Float!
+  maxHeartRate: Float!
+  totalDistance: Float!
+  avgCadence: Float!
+  avgHeartRate: Float!
+  sport: String!
+}
