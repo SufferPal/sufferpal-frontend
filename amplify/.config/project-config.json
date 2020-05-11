@@ -1,4 +1,5 @@
 {
+  "providers": ["awscloudformation"],
   "projectName": "sufferpal",
   "version": "3.0",
   "frontend": "javascript",
@@ -7,9 +8,8 @@
     "config": {
       "SourceDir": "src",
       "DistributionDir": "build",
-      "BuildCommand": "npm run-scripts build",
-      "StartCommand": "npm run-scripts start"
+      "BuildCommand": "npm run-script build",
+      "StartCommand": "npm run-script start"
     }
-  },
-  "providers": ["awscloudformation"]
+  }
 }
