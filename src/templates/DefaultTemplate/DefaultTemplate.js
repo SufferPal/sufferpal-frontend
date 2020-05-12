@@ -14,6 +14,6 @@ const DefaultTemplate = ({ children }) => {
   );
 };
 
-DefaultTemplate.propTypes = { children: PropTypes.element.isRequired };
+DefaultTemplate.propTypes = { children: PropTypes.node.isRequired };
 
 export default DefaultTemplate;
