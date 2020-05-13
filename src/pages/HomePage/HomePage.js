@@ -46,7 +46,7 @@ const HomePage = () => {
       HomePage
       <Upload />
       <div style={styles.container}>
-        {/* <h2>Amplify Users</h2> */}
+        <h2>Amplify Users</h2>
         <input
           onChange={(event) => setInput('firstName', event.target.value)}
           style={styles.input}
