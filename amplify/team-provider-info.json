@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-sufferpal-dev-135325-authRole",
+      "UnauthRoleArn": "arn:aws:iam::013995497548:role/amplify-sufferpal-dev-135325-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::013995497548:role/amplify-sufferpal-dev-135325-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-sufferpal-dev-135325-deployment",
+      "UnauthRoleName": "amplify-sufferpal-dev-135325-unauthRole",
+      "StackName": "amplify-sufferpal-dev-135325",
+      "StackId": "arn:aws:cloudformation:us-east-2:013995497548:stack/amplify-sufferpal-dev-135325/5f1e9ef0-8d6f-11ea-854b-02d970724e3a",
+      "AmplifyAppId": "d1msy21q64qdnx"
+    }
+  }
+}
