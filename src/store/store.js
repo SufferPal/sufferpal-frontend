@@ -9,7 +9,7 @@ let user = {
   firstName: 'Daniel',
   lastName: 'Pencak',
   email: 'test@test.com',
-  id: '8b3a0896-493e-4dc2-b4f8-806985b24fd4',
+  id: '6c57fb6a-3ec6-4c67-a205-8323952c8293',
 };
 
 export const initialState = {

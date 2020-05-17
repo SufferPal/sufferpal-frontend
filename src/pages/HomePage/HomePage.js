@@ -20,13 +20,13 @@ const HomePage = () => {
   }
 
   async function fetchUsers() {
-    try {
-      const userData = await API.graphql(graphqlOperation(listUsers));
-      const users = userData.data.listUsers.items;
-      setUsers(users);
-    } catch (err) {
-      console.log('error fetching users');
-    }
+    // try {
+    //   // const userData = await API.graphql(graphqlOperation(listUsers));
+    //   // const users = userData.data.listUsers.items;
+    //   // setUsers(users);
+    // } catch (err) {
+    //   console.log('error fetching users');
+    // }
   }
 
   async function addUser() {

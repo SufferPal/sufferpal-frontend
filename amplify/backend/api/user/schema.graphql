@@ -1,22 +1,50 @@
 type User @model {
   id: ID!
-  firstName: String!
-  lastName: String!
-  email: String!
+  firstName: String
+  lastName: String
+  email: String
   phoneNumber: String
+  gender: String
+  age: Int
+  weight: Float
+  maxHeartRate: Float
+  friends: [String]
+  bestTime10K: Float
+  bestTime5K: Float
+  bestTime1K: Float
+  bestTime1Mile: Float
+  activities: [Activity] @connection(keyName: "byUser", fields: ["id"])
 }
 
-type Activity @model {
+type Activity @model @key(name: "byUser", fields: ["userID"]) {
   id: ID!
-  totalCalories: Float!
-  startTime: String!
-  totalMovingTime: Float!
-  maxCadence: Float!
-  minHeartRate: Float!
-  avgSpeed: Float!
-  maxHeartRate: Float!
-  totalDistance: Float!
-  avgCadence: Float!
-  avgHeartRate: Float!
-  sport: String!
+  userID: ID!
+  totalCalories: Float
+  startTime: String
+  totalMovingTime: Float
+  maxCadence: Float
+  minHeartRate: Float
+  avgSpeed: Float
+  maxHeartRate: Float
+  totalDistance: Float
+  avgCadence: Float
+  avgHeartRate: Float
+  sport: String
+  rawMeasurements: [RawMeasurement]
+  description: String
+}
+
+type RawMeasurement {
+  timestamp: String
+  timer_time: Int
+  position_lat: Float
+  position_long: Float
+  distance: Float
+  heart_rate: Float
+  speed: Float
+  temperature: Float
+  altitude: Float
+  cadence: Float
+  elapsed_time: Float
+  fractional_cadence: Float
 }
