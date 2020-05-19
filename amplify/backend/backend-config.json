@@ -9,8 +9,8 @@
           "defaultAuthentication": {
             "authenticationType": "API_KEY",
             "apiKeyConfig": {
-              "description": "sufferpalapi-dev2",
-              "apiKeyExpirationDays": "365"
+              "description": "sufferpal-dev-key",
+              "apiKeyExpirationDays": 7
             }
           }
         }
