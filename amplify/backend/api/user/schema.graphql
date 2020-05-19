@@ -30,21 +30,6 @@ type Activity @model @key(name: "byUser", fields: ["userID"]) {
   avgCadence: Float
   avgHeartRate: Float
   sport: String
-  rawMeasurements: [RawMeasurement]
+  rawMeasurementsS3FileKey: String
   description: String
-}
-
-type RawMeasurement {
-  timestamp: String
-  timer_time: Int
-  position_lat: Float
-  position_long: Float
-  distance: Float
-  heart_rate: Float
-  speed: Float
-  temperature: Float
-  altitude: Float
-  cadence: Float
-  elapsed_time: Float
-  fractional_cadence: Float
 }

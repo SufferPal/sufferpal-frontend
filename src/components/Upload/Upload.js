@@ -1,6 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { API, graphqlOperation } from 'aws-amplify';
+import Storage from '@aws-amplify/storage';
 import { createActivity } from '../../graphql/mutations';
 import { getActivity, getUser } from '../../graphql/queries';
 import FitParser from 'fit-file-parser';
@@ -42,7 +43,7 @@ const Upload = () => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const addActivity = async (activity) => {
-    console.log(activity);
+    // console.log(activity);
     await API.graphql(graphqlOperation(createActivity, { input: activity }));
   };
 
@@ -53,6 +54,11 @@ const Upload = () => {
   const fetchActivity = async () => {
     const userData = await API.graphql(graphqlOperation(getUser, { id: userID }));
     console.log(userData);
+    Storage.get(userData.data.getUser.activities.items[0].rawMeasurementsS3FileKey, { download: true }).then(
+      (result) => {
+        console.log(result.Body);
+      }
+    );
     // const activityData = await API.graphql(
     //   graphqlOperation(getActivity, { id: '3ac0b53c-39d0-4e6f-b50c-ecff62bc11a4' })
     // );
@@ -79,12 +85,28 @@ const Upload = () => {
       }
 
       console.log(activity?.records);
-      customActivityData['rawMeasurements'] = activity?.records;
+      // customActivityData['rawMeasurements'] = activity?.records;
+      const stringifiedRawMeasurements = JSON.stringify(activity?.records);
+      const blob = new Blob([stringifiedRawMeasurements], { type: 'application/json' });
+      const rawMeasurementsFileName = `fit_${Date.now()}_${userID}`;
+      // console.log(new Date());
+      console.log(
+        'done writing',
+        blob.text().then((result) => {
+          console.log('done', JSON.parse(result));
+        })
+      );
       customActivityData['userID'] = userID;
 
-      console.log(customActivityData);
+      Storage.put(rawMeasurementsFileName, blob).then((result) => {
+        console.log(result);
 
-      addActivity(customActivityData);
+        customActivityData['rawMeasurementsS3FileKey'] = result.key;
+
+        // console.log(customActivityData);
+
+        addActivity(customActivityData);
+      });
     }
   }, [activity]);
 

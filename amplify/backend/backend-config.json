@@ -16,5 +16,18 @@
         }
       }
     }
+  },
+  "auth": {
+    "sufferpal11a4676d": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": []
+    }
+  },
+  "storage": {
+    "sufferpalauth": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation"
+    }
   }
 }
