@@ -6,10 +6,12 @@ import { createActivity } from '../../graphql/mutations';
 import { getActivity, getUser } from '../../graphql/queries';
 import FitParser from 'fit-file-parser';
 import { useSelector } from 'react-redux';
+import MapContainer from '../Map/MapContainer';
 
 const Upload = () => {
   const [activity, setActivity] = useState({});
   const userID = useSelector((state) => state.user.id);
+  const [rawMeasurements, setRawMeasurements] = useState([]);
 
   console.log(userID);
 
@@ -35,6 +37,7 @@ const Upload = () => {
         // Parse your file
         fitParser.parse(binaryString, function (error, data) {
           setActivity(data);
+          setRawMeasurements(data.records);
         });
       };
       reader.readAsArrayBuffer(file);
@@ -53,6 +56,9 @@ const Upload = () => {
 
   const fetchActivity = async () => {
     const userData = await API.graphql(graphqlOperation(getUser, { id: userID }));
+
+    //setRawMeasurements(userData.data.getUser.activities.items[0].rawMeasurements);
+
     console.log(userData);
     Storage.get(userData.data.getUser.activities.items[0].rawMeasurementsS3FileKey, { download: true }).then(
       (result) => {
@@ -63,6 +69,7 @@ const Upload = () => {
     //   graphqlOperation(getActivity, { id: '3ac0b53c-39d0-4e6f-b50c-ecff62bc11a4' })
     // );
     // console.log(activityData.data.getActivity);
+
   };
 
   useEffect(() => {
@@ -111,10 +118,14 @@ const Upload = () => {
   }, [activity]);
 
   return (
-    <div {...getRootProps()}>
-      <input {...getInputProps()} />
-      {isDragActive ? <p>Drop the files here ...</p> : <p>Drag 'n' drop some files here, or click to select files</p>}
-    </div>
+    <>
+      <div {...getRootProps()}>
+        <input {...getInputProps()} />
+        {isDragActive ? <p>Drop the files here ...</p> : <p>Drag 'n' drop some files here, or click to select files</p>}
+      </div>
+      {activity.rawMeasurements}
+      <MapContainer rawMeasurements={rawMeasurements || []} />
+    </>
   );
 };
 
