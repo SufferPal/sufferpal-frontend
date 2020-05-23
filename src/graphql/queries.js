@@ -33,20 +33,7 @@ export const getUser = /* GraphQL */ `
           avgCadence
           avgHeartRate
           sport
-          rawMeasurements {
-            timestamp
-            timer_time
-            position_lat
-            position_long
-            distance
-            heart_rate
-            speed
-            temperature
-            altitude
-            cadence
-            elapsed_time
-            fractional_cadence
-          }
+          rawMeasurementsS3FileKey
           description
         }
         nextToken
@@ -73,36 +60,6 @@ export const listUsers = /* GraphQL */ `
         bestTime1K
         bestTime1Mile
         activities {
-          items {
-            id
-            userID
-            totalCalories
-            startTime
-            totalMovingTime
-            maxCadence
-            minHeartRate
-            avgSpeed
-            maxHeartRate
-            totalDistance
-            avgCadence
-            avgHeartRate
-            sport
-            rawMeasurements {
-              timestamp
-              timer_time
-              position_lat
-              position_long
-              distance
-              heart_rate
-              speed
-              temperature
-              altitude
-              cadence
-              elapsed_time
-              fractional_cadence
-            }
-            description
-          }
           nextToken
         }
       }
@@ -126,20 +83,7 @@ export const getActivity = /* GraphQL */ `
       avgCadence
       avgHeartRate
       sport
-      rawMeasurements {
-        timestamp
-        timer_time
-        position_lat
-        position_long
-        distance
-        heart_rate
-        speed
-        temperature
-        altitude
-        cadence
-        elapsed_time
-        fractional_cadence
-      }
+      rawMeasurementsS3FileKey
       description
     }
   }
@@ -161,20 +105,7 @@ export const listActivitys = /* GraphQL */ `
         avgCadence
         avgHeartRate
         sport
-        rawMeasurements {
-          timestamp
-          timer_time
-          position_lat
-          position_long
-          distance
-          heart_rate
-          speed
-          temperature
-          altitude
-          cadence
-          elapsed_time
-          fractional_cadence
-        }
+        rawMeasurementsS3FileKey
         description
       }
       nextToken

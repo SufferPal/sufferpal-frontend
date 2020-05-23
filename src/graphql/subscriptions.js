@@ -33,20 +33,7 @@ export const onCreateUser = /* GraphQL */ `
           avgCadence
           avgHeartRate
           sport
-          rawMeasurements {
-            timestamp
-            timer_time
-            position_lat
-            position_long
-            distance
-            heart_rate
-            speed
-            temperature
-            altitude
-            cadence
-            elapsed_time
-            fractional_cadence
-          }
+          rawMeasurementsS3FileKey
           description
         }
         nextToken
@@ -86,20 +73,7 @@ export const onUpdateUser = /* GraphQL */ `
           avgCadence
           avgHeartRate
           sport
-          rawMeasurements {
-            timestamp
-            timer_time
-            position_lat
-            position_long
-            distance
-            heart_rate
-            speed
-            temperature
-            altitude
-            cadence
-            elapsed_time
-            fractional_cadence
-          }
+          rawMeasurementsS3FileKey
           description
         }
         nextToken
@@ -139,20 +113,7 @@ export const onDeleteUser = /* GraphQL */ `
           avgCadence
           avgHeartRate
           sport
-          rawMeasurements {
-            timestamp
-            timer_time
-            position_lat
-            position_long
-            distance
-            heart_rate
-            speed
-            temperature
-            altitude
-            cadence
-            elapsed_time
-            fractional_cadence
-          }
+          rawMeasurementsS3FileKey
           description
         }
         nextToken
@@ -176,20 +137,7 @@ export const onCreateActivity = /* GraphQL */ `
       avgCadence
       avgHeartRate
       sport
-      rawMeasurements {
-        timestamp
-        timer_time
-        position_lat
-        position_long
-        distance
-        heart_rate
-        speed
-        temperature
-        altitude
-        cadence
-        elapsed_time
-        fractional_cadence
-      }
+      rawMeasurementsS3FileKey
       description
     }
   }
@@ -210,20 +158,7 @@ export const onUpdateActivity = /* GraphQL */ `
       avgCadence
       avgHeartRate
       sport
-      rawMeasurements {
-        timestamp
-        timer_time
-        position_lat
-        position_long
-        distance
-        heart_rate
-        speed
-        temperature
-        altitude
-        cadence
-        elapsed_time
-        fractional_cadence
-      }
+      rawMeasurementsS3FileKey
       description
     }
   }
@@ -244,20 +179,7 @@ export const onDeleteActivity = /* GraphQL */ `
       avgCadence
       avgHeartRate
       sport
-      rawMeasurements {
-        timestamp
-        timer_time
-        position_lat
-        position_long
-        distance
-        heart_rate
-        speed
-        temperature
-        altitude
-        cadence
-        elapsed_time
-        fractional_cadence
-      }
+      rawMeasurementsS3FileKey
       description
     }
   }
