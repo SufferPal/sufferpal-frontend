@@ -9,6 +9,35 @@ export const getUser = /* GraphQL */ `
       lastName
       email
       phoneNumber
+      gender
+      age
+      weight
+      maxHeartRate
+      friends
+      bestTime10K
+      bestTime5K
+      bestTime1K
+      bestTime1Mile
+      activities {
+        items {
+          id
+          userID
+          totalCalories
+          startTime
+          totalMovingTime
+          maxCadence
+          minHeartRate
+          avgSpeed
+          maxHeartRate
+          totalDistance
+          avgCadence
+          avgHeartRate
+          sport
+          rawMeasurementsS3FileKey
+          description
+        }
+        nextToken
+      }
     }
   }
 `;
@@ -21,6 +50,18 @@ export const listUsers = /* GraphQL */ `
         lastName
         email
         phoneNumber
+        gender
+        age
+        weight
+        maxHeartRate
+        friends
+        bestTime10K
+        bestTime5K
+        bestTime1K
+        bestTime1Mile
+        activities {
+          nextToken
+        }
       }
       nextToken
     }
@@ -30,6 +71,7 @@ export const getActivity = /* GraphQL */ `
   query GetActivity($id: ID!) {
     getActivity(id: $id) {
       id
+      userID
       totalCalories
       startTime
       totalMovingTime
@@ -41,6 +83,8 @@ export const getActivity = /* GraphQL */ `
       avgCadence
       avgHeartRate
       sport
+      rawMeasurementsS3FileKey
+      description
     }
   }
 `;
@@ -49,6 +93,7 @@ export const listActivitys = /* GraphQL */ `
     listActivitys(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        userID
         totalCalories
         startTime
         totalMovingTime
@@ -60,6 +105,8 @@ export const listActivitys = /* GraphQL */ `
         avgCadence
         avgHeartRate
         sport
+        rawMeasurementsS3FileKey
+        description
       }
       nextToken
     }
