@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { API, graphqlOperation } from 'aws-amplify';
 import Storage from '@aws-amplify/storage';
@@ -12,6 +12,7 @@ import './CreateActivityForm.scss';
 const UploadActivity = () => {
   const [activity, setActivity] = useState({});
   const userID = useSelector((state) => state.user.id);
+  const [activityDescription, setActivityDescription] = useState('');
 
   const onDrop = useCallback((acceptedFiles) => {
     // Do something with the files
@@ -26,9 +27,9 @@ const UploadActivity = () => {
         // Create a FitParser instance (options argument is optional)
         const fitParser = new FitParser({
           force: true,
-          speedUnit: 'km/h',
-          lengthUnit: 'km',
-          temperatureUnit: 'kelvin',
+          speedUnit: 'mph',
+          lengthUnit: 'mi',
+          temperatureUnit: 'fahrenheit',
           elapsedRecordField: true,
           mode: 'list',
         });
@@ -49,7 +50,9 @@ const UploadActivity = () => {
     await API.graphql(graphqlOperation(createActivity, { input: activity }));
   };
 
-  useEffect(() => {
+  const handleCreateActivityFormSubmit = (event) => {
+    event.preventDefault();
+
     const isActivityEmpty = Object.entries(activity).length === 0;
     const customActivityData = {};
 
@@ -76,6 +79,7 @@ const UploadActivity = () => {
       const rawMeasurementsFileName = `Fit Files/${userID}/fit_${Date.now()}`;
 
       customActivityData['userID'] = userID;
+      customActivityData['description'] = activityDescription;
 
       // Add stringified version of raw measurements
       // into S3 at file path defined above
@@ -85,12 +89,18 @@ const UploadActivity = () => {
         addActivity(customActivityData);
       });
     }
-  }, [activity, userID]);
+  };
+
+  const handleActivityDescriptionOnChange = (event) => {
+    const { value } = event.target;
+
+    setActivityDescription(value);
+  };
 
   return (
     <div className="CreateActivityForm py-2 px-4 mb-3">
       <img className="sufferpal-logo" src={SufferPalLogo} alt="SufferPal Logo" />
-      <Form noValidate>
+      <Form noValidate onSubmit={handleCreateActivityFormSubmit}>
         <div sm="8" className="upload-cont">
           <FormGroup className="p-2 m-0 mb-1">
             <Label for="fitFileUpload" className="upload-label">
@@ -119,7 +129,12 @@ const UploadActivity = () => {
             <Label for="activityDescription" className="descr-label">
               DESCRIPTION
             </Label>
-            <Input type="textarea" name="activityDescription" id="activityDescription" />
+            <Input
+              type="textarea"
+              onChange={handleActivityDescriptionOnChange}
+              name="activityDescription"
+              id="activityDescription"
+            />
           </FormGroup>
           <Button className="flex-grow-1 submit-btn">SUBMIT ACTIVITY</Button>
         </div>
