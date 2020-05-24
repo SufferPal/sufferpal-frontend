@@ -3,22 +3,20 @@ import { useDropzone } from 'react-dropzone';
 import { API, graphqlOperation } from 'aws-amplify';
 import Storage from '@aws-amplify/storage';
 import { createActivity } from '../../graphql/mutations';
-import { getActivity, getUser } from '../../graphql/queries';
 import FitParser from 'fit-file-parser';
 import { useSelector } from 'react-redux';
-import MapContainer from '../Map/MapContainer';
+import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import './CreateActivityForm.scss';
 
-const Upload = () => {
+const UploadActivity = () => {
   const [activity, setActivity] = useState({});
   const userID = useSelector((state) => state.user.id);
-  const [rawMeasurements, setRawMeasurements] = useState([]);
-
-  console.log(userID);
 
   const onDrop = useCallback((acceptedFiles) => {
     // Do something with the files
     acceptedFiles.forEach((file) => {
       const reader = new FileReader();
+
       reader.onabort = () => console.log('file reading was aborted');
       reader.onerror = () => console.log('file reading has failed');
 
@@ -37,38 +35,17 @@ const Upload = () => {
         // Parse your file
         fitParser.parse(binaryString, function (error, data) {
           setActivity(data);
-          setRawMeasurements(data.records);
         });
       };
+
       reader.readAsArrayBuffer(file);
     });
   }, []);
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const addActivity = async (activity) => {
-    // console.log(activity);
     await API.graphql(graphqlOperation(createActivity, { input: activity }));
-  };
-
-  useEffect(() => {
-    fetchActivity();
-  }, []);
-
-  const fetchActivity = async () => {
-    const userData = await API.graphql(graphqlOperation(getUser, { id: userID }));
-
-    //setRawMeasurements(userData.data.getUser.activities.items[0].rawMeasurements);
-
-    console.log(userData);
-    // Storage.get(userData.data.getUser.activities.items[0].rawMeasurementsS3FileKey, { download: true }).then(
-    //   (result) => {
-    //     console.log(result.Body);
-    //   }
-    // );
-    // const activityData = await API.graphql(
-    //   graphqlOperation(getActivity, { id: '3ac0b53c-39d0-4e6f-b50c-ecff62bc11a4' })
-    // );
-    // console.log(activityData.data.getActivity);
   };
 
   useEffect(() => {
@@ -90,42 +67,33 @@ const Upload = () => {
         customActivityData['avgHeartRate'] = activity?.sessions[0]?.avg_heart_rate;
       }
 
-      console.log(activity?.records);
-      // customActivityData['rawMeasurements'] = activity?.records;
+      // Creating a stringified version of raw measurements
       const stringifiedRawMeasurements = JSON.stringify(activity?.records);
+      // Create new blob with JSON version of raw measurements to send to S3
       const blob = new Blob([stringifiedRawMeasurements], { type: 'application/json' });
+      // Create S3 file path
       const rawMeasurementsFileName = `Fit Files/${userID}/fit_${Date.now()}`;
-      // console.log(new Date());
-      console.log(
-        'done writing',
-        blob.text().then((result) => {
-          console.log('done', JSON.parse(result));
-        })
-      );
+
       customActivityData['userID'] = userID;
 
+      // Add stringified version of raw measurements
+      // into S3 at file path defined above
       Storage.put(rawMeasurementsFileName, blob).then((result) => {
-        console.log(result);
-
         customActivityData['rawMeasurementsS3FileKey'] = result.key;
-
-        // console.log(customActivityData);
 
         addActivity(customActivityData);
       });
     }
-  }, [activity]);
+  }, [activity, userID]);
 
   return (
     <>
       <div {...getRootProps()}>
-        <input {...getInputProps()} />
+        <Input {...getInputProps()} />
         {isDragActive ? <p>Drop the files here ...</p> : <p>Drag 'n' drop some files here, or click to select files</p>}
       </div>
-      {activity.rawMeasurements}
-      <MapContainer rawMeasurements={rawMeasurements || []} />
     </>
   );
 };
 
-export default Upload;
+export default UploadActivity;
