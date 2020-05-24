@@ -16,4 +16,6 @@ test('renders ProfilePage', () => {
   );
   const profilePageText = getByText(/your activities/i);
   expect(profilePageText).toBeInTheDocument();
+  const createActivityFormText = getByText(/fit file dropbox/i);
+  expect(createActivityFormText).toBeInTheDocument();
 });
