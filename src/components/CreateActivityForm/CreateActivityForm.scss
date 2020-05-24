@@ -38,5 +38,18 @@
         cursor: pointer;
       }
     }
+
+    .fit-file-dropped-text,
+    .fit-file-dropped-header {
+      color: #656569;
+    }
+
+    .fit-file-dropped-text {
+      font-size: 12.8px;
+    }
+
+    .fit-file-dropped-header {
+      font-size: 16px;
+    }
   }
 }

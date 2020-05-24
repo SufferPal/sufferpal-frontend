@@ -5,7 +5,7 @@ import Storage from '@aws-amplify/storage';
 import { createActivity } from '../../graphql/mutations';
 import FitParser from 'fit-file-parser';
 import { useSelector } from 'react-redux';
-import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input, FormText, Alert } from 'reactstrap';
 import SufferPalLogo from '../../assets/logo-sufferpal.png';
 import './CreateActivityForm.scss';
 
@@ -13,6 +13,9 @@ const UploadActivity = () => {
   const [activity, setActivity] = useState({});
   const userID = useSelector((state) => state.user.id);
   const [activityDescription, setActivityDescription] = useState('');
+  const [isFitFileDropped, setIsFitFileDropped] = useState(false);
+  const [isCreateActivitySuccessful, setIsCreateActivitySuccessful] = useState(false);
+  const [isCreateSuccessAlertOpen, setIsCreateSuccessAlertOpen] = useState(false);
 
   const onDrop = useCallback((acceptedFiles) => {
     // Do something with the files
@@ -37,6 +40,7 @@ const UploadActivity = () => {
         // Parse your file
         fitParser.parse(binaryString, function (error, data) {
           setActivity(data);
+          setIsFitFileDropped(true);
         });
       };
 
@@ -52,6 +56,11 @@ const UploadActivity = () => {
 
   const handleCreateActivityFormSubmit = (event) => {
     event.preventDefault();
+    event.target.reset();
+
+    setActivityDescription('');
+    setActivity({});
+    setIsFitFileDropped(false);
 
     const isActivityEmpty = Object.entries(activity).length === 0;
     const customActivityData = {};
@@ -86,7 +95,10 @@ const UploadActivity = () => {
       Storage.put(rawMeasurementsFileName, blob).then((result) => {
         customActivityData['rawMeasurementsS3FileKey'] = result.key;
 
-        addActivity(customActivityData);
+        addActivity(customActivityData).then(() => {
+          setIsCreateActivitySuccessful(true);
+          setIsCreateSuccessAlertOpen(true);
+        });
       });
     }
   };
@@ -97,32 +109,49 @@ const UploadActivity = () => {
     setActivityDescription(value);
   };
 
+  const handleSuccessAlertToggle = () => {
+    setIsCreateSuccessAlertOpen(false);
+  };
+
   return (
     <div className="CreateActivityForm py-2 px-4 mb-3">
+      {isCreateActivitySuccessful && (
+        <Alert isOpen={isCreateSuccessAlertOpen} toggle={handleSuccessAlertToggle} color="success">
+          Activity Created!
+        </Alert>
+      )}
       <img className="sufferpal-logo" src={SufferPalLogo} alt="SufferPal Logo" />
       <Form noValidate onSubmit={handleCreateActivityFormSubmit}>
         <div sm="8" className="upload-cont">
-          <FormGroup className="p-2 m-0 mb-1">
-            <Label for="fitFileUpload" className="upload-label">
-              FIT FILE DROPBOX
-            </Label>
-            <div {...getRootProps()}>
-              <input
-                {...getInputProps({
-                  type: 'file',
-                  name: 'fitFile',
-                  id: 'fitFileUpload',
-                })}
-              />
-              <FormText className="upload-text">
-                {isDragActive ? (
-                  <p>Drop your FIT FILE here ...</p>
-                ) : (
-                  <p>Drop a FIT FILE here, or click to select FIT FILE</p>
-                )}
-              </FormText>
+          {isFitFileDropped ? (
+            <div className="p-2 m-0 mb-1">
+              <h4 className="fit-file-dropped-header m-0 mb-2">FIT FILE DROPBOX</h4>
+              <p className="fit-file-dropped-text m-0">Fit file dropped!</p>
+              <p className="fit-file-dropped-text m-0">Add a description if you would and then hit submit.</p>
             </div>
-          </FormGroup>
+          ) : (
+            <FormGroup className="p-2 m-0 mb-1">
+              <Label for="fitFileUpload" className="upload-label">
+                FIT FILE DROPBOX
+              </Label>
+              <div {...getRootProps()}>
+                <input
+                  {...getInputProps({
+                    type: 'file',
+                    name: 'fitFile',
+                    id: 'fitFileUpload',
+                  })}
+                />
+                <FormText className="upload-text">
+                  {isDragActive ? (
+                    <p>Drop your FIT FILE here ...</p>
+                  ) : (
+                    <p>Drop a FIT FILE here, or click to select FIT FILE</p>
+                  )}
+                </FormText>
+              </div>
+            </FormGroup>
+          )}
         </div>
         <div className="d-flex align-items-end description-submit-cont">
           <FormGroup className="description-form-grp p-2 mr-2 m-0">
