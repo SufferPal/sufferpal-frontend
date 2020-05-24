@@ -11,6 +11,7 @@ export const getUser = /* GraphQL */ `
       phoneNumber
       gender
       age
+      profilePictureS3FileKey
       weight
       maxHeartRate
       friends
@@ -52,6 +53,7 @@ export const listUsers = /* GraphQL */ `
         phoneNumber
         gender
         age
+        profilePictureS3FileKey
         weight
         maxHeartRate
         friends

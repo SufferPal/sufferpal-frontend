@@ -60,16 +60,15 @@ const Upload = () => {
     //setRawMeasurements(userData.data.getUser.activities.items[0].rawMeasurements);
 
     console.log(userData);
-    Storage.get(userData.data.getUser.activities.items[0].rawMeasurementsS3FileKey, { download: true }).then(
-      (result) => {
-        console.log(result.Body);
-      }
-    );
+    // Storage.get(userData.data.getUser.activities.items[0].rawMeasurementsS3FileKey, { download: true }).then(
+    //   (result) => {
+    //     console.log(result.Body);
+    //   }
+    // );
     // const activityData = await API.graphql(
     //   graphqlOperation(getActivity, { id: '3ac0b53c-39d0-4e6f-b50c-ecff62bc11a4' })
     // );
     // console.log(activityData.data.getActivity);
-
   };
 
   useEffect(() => {
@@ -95,7 +94,7 @@ const Upload = () => {
       // customActivityData['rawMeasurements'] = activity?.records;
       const stringifiedRawMeasurements = JSON.stringify(activity?.records);
       const blob = new Blob([stringifiedRawMeasurements], { type: 'application/json' });
-      const rawMeasurementsFileName = `fit_${Date.now()}_${userID}`;
+      const rawMeasurementsFileName = `Fit Files/${userID}/fit_${Date.now()}`;
       // console.log(new Date());
       console.log(
         'done writing',

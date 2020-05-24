@@ -10,6 +10,10 @@ let user = {
   lastName: 'Pencak',
   email: 'test@test.com',
   id: '6c57fb6a-3ec6-4c67-a205-8323952c8293',
+  gender: 'Male',
+  age: 31,
+  weight: 225,
+  maxHeartRate: 60,
 };
 
 export const initialState = {

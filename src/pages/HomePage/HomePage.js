@@ -2,14 +2,16 @@ import React, { useState, useEffect } from 'react';
 import DefaultTemplate from '../../templates/DefaultTemplate/DefaultTemplate';
 import Upload from '../../components/Upload/Upload';
 import { API, graphqlOperation } from 'aws-amplify';
-import { createUser } from '../../graphql/mutations';
+import { createUser, updateUser } from '../../graphql/mutations';
 import { listUsers } from '../../graphql/queries';
+import { useSelector } from 'react-redux';
 
 const initialState = { firstName: '', lastName: '', email: '' };
 
 const HomePage = () => {
   const [formState, setFormState] = useState(initialState);
   const [users, setUsers] = useState([]);
+  const user = useSelector((state) => state.user);
 
   useEffect(() => {
     fetchUsers();
@@ -20,13 +22,13 @@ const HomePage = () => {
   }
 
   async function fetchUsers() {
-    // try {
-    //   // const userData = await API.graphql(graphqlOperation(listUsers));
-    //   // const users = userData.data.listUsers.items;
-    //   // setUsers(users);
-    // } catch (err) {
-    //   console.log('error fetching users');
-    // }
+    try {
+      await API.graphql(graphqlOperation(updateUser, { input: user }));
+      // const users = userData.data.listUsers.items;
+      // setUsers(users);
+    } catch (err) {
+      console.log('error fetching users');
+    }
   }
 
   async function addUser() {

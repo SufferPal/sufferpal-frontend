@@ -6,6 +6,7 @@ type User @model {
   phoneNumber: String
   gender: String
   age: Int
+  profilePictureS3FileKey: String
   weight: Float
   maxHeartRate: Float
   friends: [String]

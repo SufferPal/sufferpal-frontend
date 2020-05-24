@@ -11,6 +11,7 @@ export const createUser = /* GraphQL */ `
       phoneNumber
       gender
       age
+      profilePictureS3FileKey
       weight
       maxHeartRate
       friends
@@ -51,6 +52,7 @@ export const updateUser = /* GraphQL */ `
       phoneNumber
       gender
       age
+      profilePictureS3FileKey
       weight
       maxHeartRate
       friends
@@ -91,6 +93,7 @@ export const deleteUser = /* GraphQL */ `
       phoneNumber
       gender
       age
+      profilePictureS3FileKey
       weight
       maxHeartRate
       friends
