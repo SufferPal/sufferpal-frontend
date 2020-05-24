@@ -5,7 +5,8 @@ import Storage from '@aws-amplify/storage';
 import { createActivity } from '../../graphql/mutations';
 import FitParser from 'fit-file-parser';
 import { useSelector } from 'react-redux';
-import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+import SufferPalLogo from '../../assets/logo-sufferpal.png';
 import './CreateActivityForm.scss';
 
 const UploadActivity = () => {
@@ -87,12 +88,43 @@ const UploadActivity = () => {
   }, [activity, userID]);
 
   return (
-    <>
-      <div {...getRootProps()}>
-        <Input {...getInputProps()} />
-        {isDragActive ? <p>Drop the files here ...</p> : <p>Drag 'n' drop some files here, or click to select files</p>}
-      </div>
-    </>
+    <div className="CreateActivityForm py-2 px-4 mb-3">
+      <img className="sufferpal-logo" src={SufferPalLogo} alt="SufferPal Logo" />
+      <Form noValidate>
+        <div sm="8" className="upload-cont">
+          <FormGroup className="p-2 m-0 mb-1">
+            <Label for="fitFileUpload" className="upload-label">
+              FIT FILE DROPBOX
+            </Label>
+            <div {...getRootProps()}>
+              <input
+                {...getInputProps({
+                  type: 'file',
+                  name: 'fitFile',
+                  id: 'fitFileUpload',
+                })}
+              />
+              <FormText className="upload-text">
+                {isDragActive ? (
+                  <p>Drop your FIT FILE here ...</p>
+                ) : (
+                  <p>Drop a FIT FILE here, or click to select FIT FILE</p>
+                )}
+              </FormText>
+            </div>
+          </FormGroup>
+        </div>
+        <div className="d-flex align-items-end description-submit-cont">
+          <FormGroup className="description-form-grp p-2 mr-2 m-0">
+            <Label for="activityDescription" className="descr-label">
+              DESCRIPTION
+            </Label>
+            <Input type="textarea" name="activityDescription" id="activityDescription" />
+          </FormGroup>
+          <Button className="flex-grow-1 submit-btn">SUBMIT ACTIVITY</Button>
+        </div>
+      </Form>
+    </div>
   );
 };
 
