@@ -1,8 +1,7 @@
 // ES6
 import ReactMapboxGl, { GeoJSONLayer } from 'react-mapbox-gl';
 import React, { useEffect, useState } from 'react';
-import { setupMapGeoJSONData } from '../../shared/functions/helpers';
-import { container } from 'aws-amplify';
+import { setupMapGeoJSONData, setMapCenterCoordinates } from '../../shared/functions/helpers';
 
 const Map = ReactMapboxGl({
   accessToken: 'pk.eyJ1Ijoiam1pa3J1dDA4IiwiYSI6ImNrYTdnN3A4djAzZGUycXBtNHhpN25wN2oifQ.37cxxJ1_4PvsX71YbaTv3Q',
@@ -10,7 +9,7 @@ const Map = ReactMapboxGl({
 
 const MapContainer = ({ rawMeasurements = [] }) => {
   const [coordinates, setCoordinates] = useState([]);
-  const [coordinateCount, setCoordinateCount] = useState(0);
+  const [centerCoordinates, setCenterCoordinates] = useState([-87.81415463425219, 41.89763618633151]);
 
   const linePaint = {
     'line-color': 'red',
@@ -18,28 +17,28 @@ const MapContainer = ({ rawMeasurements = [] }) => {
   };
 
   useEffect(() => {
-    console.log('raw', rawMeasurements);
-    //console.log(coordinates.length);
+    console.log(rawMeasurements);
     const rawMeasurementCoordinates = setupMapGeoJSONData(rawMeasurements);
-    console.log('RMC', rawMeasurementCoordinates);
+    const centerCoordinates = setMapCenterCoordinates(rawMeasurementCoordinates);
+    console.log(centerCoordinates);
     setCoordinates(rawMeasurementCoordinates);
-    console.log('coordinates', coordinates);
-    setCoordinateCount(rawMeasurementCoordinates.length);
+    setCenterCoordinates(centerCoordinates);
   }, [rawMeasurements]);
 
   return (
     <>
       {
         <Map
+          // eslint-disable-next-line react/style-prop-object
           style="mapbox://styles/jmikrut08/ckabcy0010o7v1ip66qfgqnte"
-          center={[-87.81415463425219, 41.89763618633151]}
+          zoom={[10]}
+          center={centerCoordinates}
           containerStyle={{
-            height: '50vh',
-            width: '50vw',
+            height: '300px',
+            width: '400px',
           }}
         >
           <GeoJSONLayer
-            buffer={512}
             data={{
               type: 'FeatureCollection',
               features: [
@@ -54,16 +53,8 @@ const MapContainer = ({ rawMeasurements = [] }) => {
             }}
             linePaint={linePaint}
           />
-
-          {
-            //     <Layer type="symbol" id="marker" layout={{ 'icon-image': 'marker-15' }}>
-            //     <Feature coordinates={[-122.49378204345702, 37.83368330777276]} />
-            //   </Layer>
-          }
         </Map>
       }
-
-      {coordinates}
     </>
   );
 };

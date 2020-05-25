@@ -9,7 +9,7 @@ const DefaultTemplate = ({ children }) => {
   return (
     <>
       <Header />
-      <main class="ContainerStyles">
+      <main className="ContainerStyles">
         <Container>{children}</Container>
       </main>
       <Footer />

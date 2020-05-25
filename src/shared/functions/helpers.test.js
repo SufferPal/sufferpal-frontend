@@ -1,4 +1,10 @@
-import { setupMapGeoJSONData } from './helpers';
+import {
+  setupMapGeoJSONData,
+  calculatePace,
+  createCustomTimeString,
+  getSplitNumberArray,
+  setMapCenterCoordinates,
+} from './helpers';
 
 describe('test setupMapGeoJSONData', () => {
   it('should return array of arrays representating plotted coordinates', () => {
@@ -77,5 +83,49 @@ describe('test setupMapGeoJSONData', () => {
         },
       ])
     ).toEqual([[-87.814155, 41.8976369]]);
+  });
+});
+
+describe('test calculatePace', () => {
+  it('should return a float representing pace', () => {
+    expect(calculatePace(null, 1000)).toEqual(null);
+    expect(calculatePace(null, null)).toEqual(null);
+    expect(calculatePace(500, 10)).toEqual(0.83);
+    expect(calculatePace(120, 10)).toEqual(0.2);
+    expect(calculatePace(2378.89, 23.9398)).toEqual(1.66);
+  });
+});
+
+describe('test createCustomTimeString', () => {
+  it('should return time in HH:MM:SS', () => {
+    expect(createCustomTimeString(null)).toEqual(null);
+    expect(createCustomTimeString(500)).toEqual('00:08:20');
+    expect(createCustomTimeString(120)).toEqual('00:02:00');
+    expect(createCustomTimeString(6378.89)).toEqual('01:46:18');
+    expect(createCustomTimeString(50000)).toEqual('13:53:20');
+  });
+});
+
+describe('test getSplitNumberArray', () => {
+  it('should return an array of two numbers representing both sides of the decimal', () => {
+    expect(getSplitNumberArray(1.233)).toEqual([1, 0.233]);
+    expect(getSplitNumberArray(0.899)).toEqual([0, 0.899]);
+  });
+});
+
+describe('test setMapCenterCoordinates', () => {
+  it('should return an array with the center coordinates', () => {
+    expect(
+      setMapCenterCoordinates([
+        [2, 2],
+        [2, 4],
+      ])
+    ).toEqual([2, 3]);
+    expect(
+      setMapCenterCoordinates([
+        [1, 5],
+        [1, 3],
+      ])
+    ).toEqual([1, 4]);
   });
 });

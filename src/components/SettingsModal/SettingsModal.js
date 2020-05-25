@@ -4,8 +4,6 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import SettingsForm, { checkUpdates } from '../SettingsForm/SettingsForm';
 
 const SettingsModal = (props) => {
-  const { buttonLabel, className } = props;
-
   const [modal, setModal] = useState(false);
 
   const toggle = () => setModal(!modal);
@@ -13,9 +11,9 @@ const SettingsModal = (props) => {
   return (
     <div>
       <Button color="danger" onClick={toggle}>
-        <buttonLabel>Edit</buttonLabel>
+        Edit
       </Button>
-      <Modal isOpen={modal} toggle={toggle} className={className}>
+      <Modal isOpen={modal} toggle={toggle}>
         <ModalHeader toggle={toggle}>Edit Birthday</ModalHeader>
         <ModalBody>
           <SettingsForm />

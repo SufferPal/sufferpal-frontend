@@ -1,0 +1,30 @@
+.ActivityCard {
+  background-color: #242424;
+
+  .user-name,
+  .activity-description {
+    color: #c3c3c3;
+    font-size: 16px;
+  }
+  .profile-picture-container {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    background-color: #656569;
+  }
+  .data-column > div > h3 {
+    color: #c3c3c3;
+    font-size: 22px;
+    font-weight: bolder;
+  }
+
+  .data-header-container {
+    border-right: 1px solid gray;
+  }
+
+  .data-label,
+  .units {
+    font-size: 16px;
+    color: #656569;
+  }
+}

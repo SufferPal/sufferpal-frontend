@@ -17,20 +17,24 @@ const SettingsForm = (props) => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      await API.graphql(
-        graphqlOperation(updateUser, {
-          input: {
-            id: '6c57fb6a-3ec6-4c67-a205-8323952c8293',
-            weight: weight,
-            firstName: firstName,
-            lastName: lastName,
-          },
-        })
-      );
-      const userDataFromCall = await API.graphql(graphqlOperation(getUser, { id: userID }));
-      console.log(userDataFromCall);
-      setUserData(userDataFromCall.data.getUser);
-      setUpdatedUserData(userDataFromCall.data.getUser);
+      try {
+        await API.graphql(
+          graphqlOperation(updateUser, {
+            input: {
+              id: '6c57fb6a-3ec6-4c67-a205-8323952c8293',
+              weight: weight,
+              firstName: firstName,
+              lastName: lastName,
+            },
+          })
+        );
+        const userDataFromCall = await API.graphql(graphqlOperation(getUser, { id: userID }));
+        console.log(userDataFromCall);
+        setUserData(userDataFromCall.data.getUser);
+        setUpdatedUserData(userDataFromCall.data.getUser);
+      } catch (error) {
+        console.log(error);
+      }
     };
     fetchUser();
   }, []);
@@ -60,34 +64,40 @@ const SettingsForm = (props) => {
   };
 
   const checkUpdates = () => {
-    if (firstName != '') {
-      const updateFirstName = async () => {
-        await API.graphql(
-          graphqlOperation(updateUser, { input: { id: '6c57fb6a-3ec6-4c67-a205-8323952c8293', firstName: firstName } })
-        );
-      };
-      updateFirstName();
+    try {
+      if (firstName != '') {
+        const updateFirstName = async () => {
+          await API.graphql(
+            graphqlOperation(updateUser, {
+              input: { id: '6c57fb6a-3ec6-4c67-a205-8323952c8293', firstName: firstName },
+            })
+          );
+        };
+        updateFirstName();
+      }
+      if (lastName != '') {
+        const updateLastName = async () => {
+          await API.graphql(
+            graphqlOperation(updateUser, { input: { id: '6c57fb6a-3ec6-4c67-a205-8323952c8293', lastName: lastName } })
+          );
+        };
+        updateLastName();
+      }
+      if (weight != 0) {
+        const updateWeight = async () => {
+          await API.graphql(
+            graphqlOperation(updateUser, { input: { id: '6c57fb6a-3ec6-4c67-a205-8323952c8293', weight: weight } })
+          );
+        };
+        updateWeight();
+      }
+      console.log(firstName, lastName, weight);
+      const blob = new Blob([profilePic], { type: 'image/jpg' });
+      const profilePictureName = `profilePictures/${userID}/pic_${Date.now()}`;
+      Storage.put(profilePictureName, blob);
+    } catch (error) {
+      console.log(error);
     }
-    if (lastName != '') {
-      const updateLastName = async () => {
-        await API.graphql(
-          graphqlOperation(updateUser, { input: { id: '6c57fb6a-3ec6-4c67-a205-8323952c8293', lastName: lastName } })
-        );
-      };
-      updateLastName();
-    }
-    if (weight != 0) {
-      const updateWeight = async () => {
-        await API.graphql(
-          graphqlOperation(updateUser, { input: { id: '6c57fb6a-3ec6-4c67-a205-8323952c8293', weight: weight } })
-        );
-      };
-      updateWeight();
-    }
-    console.log(firstName, lastName, weight);
-    const blob = new Blob([profilePic], { type: 'image/jpg' });
-    const profilePictureName = `profilePictures/${userID}/pic_${Date.now()}`;
-    Storage.put(profilePictureName, blob);
   };
 
   return (

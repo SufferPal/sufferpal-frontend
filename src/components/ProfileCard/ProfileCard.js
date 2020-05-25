@@ -13,9 +13,13 @@ const ProfileCard = (props) => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const userDataFromCall = await API.graphql(graphqlOperation(getUser, { id: userID }));
-      console.log(userDataFromCall);
-      setUserData(userDataFromCall.data.getUser);
+      try {
+        const userDataFromCall = await API.graphql(graphqlOperation(getUser, { id: userID }));
+        console.log(userDataFromCall);
+        setUserData(userDataFromCall.data.getUser);
+      } catch (error) {
+        console.log(error);
+      }
     };
     fetchUser();
   }, []);
@@ -28,7 +32,7 @@ const ProfileCard = (props) => {
           <CardTitle className="font-styles">
             {userData.firstName} {userData.lastName}
           </CardTitle>
-          <CardText className="setting-labels">
+          <div className="setting-labels">
             User Settings
             <Table className="setting-labels">
               <tbody>
@@ -52,7 +56,7 @@ const ProfileCard = (props) => {
                 </tr>
               </tbody>
             </Table>
-          </CardText>
+          </div>
           <SettingsModal />
         </CardBody>
       </Card>
