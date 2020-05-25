@@ -9,7 +9,7 @@ import { Button, Form, FormGroup, Label, Input, FormText, Alert } from 'reactstr
 import SufferPalLogo from '../../assets/logo-sufferpal.png';
 import './CreateActivityForm.scss';
 
-const UploadActivity = () => {
+const CreateActivityForm = () => {
   const [activity, setActivity] = useState({});
   const userID = useSelector((state) => state.user.id);
   const [activityDescription, setActivityDescription] = useState('');
@@ -172,4 +172,4 @@ const UploadActivity = () => {
   );
 };
 
-export default UploadActivity;
+export default CreateActivityForm;

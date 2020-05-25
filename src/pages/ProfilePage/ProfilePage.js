@@ -1,7 +1,7 @@
 import React from 'react';
 import DefaultTemplate from '../../templates/DefaultTemplate/DefaultTemplate';
 import { Row, Col } from 'reactstrap';
-// import ActivityCard from '../../components/ActivityCard/ActivityCard';
+import ActivityCardContainer from '../../components/ActivityCardContainer/ActivityCardContainer';
 import CreateActivityForm from '../../components/CreateActivityForm/CreateActivityForm';
 import './ProfilePage.scss';
 
@@ -18,6 +18,7 @@ const ProfilePage = () => {
             {/* Upload Component */}
             <CreateActivityForm />
             {/* List of Card */}
+            <ActivityCardContainer />
           </Col>
         </Row>
       </div>
