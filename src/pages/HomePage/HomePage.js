@@ -23,6 +23,7 @@ const HomePage = () => {
 
   async function fetchUsers() {
     try {
+      console.log(user);
       await API.graphql(graphqlOperation(updateUser, { input: user }));
       // const users = userData.data.listUsers.items;
       // setUsers(users);

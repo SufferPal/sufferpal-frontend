@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Collapse, Navbar, NavbarToggler, Nav, NavItem, NavLink } from 'reactstrap';
 import { NavLink as RRNavLink } from 'react-router-dom';
 import './Header.scss';
+import logo from './logo-sufferpal.png';
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,25 +10,25 @@ const Header = () => {
 
   return (
     <div className="Header">
-      <Navbar color="light" light expand="md">
-        <NavLink tag={RRNavLink} exact to="/" id="header-brand">
-          SufferPal
+      <Navbar light expand="md">
+        <NavLink tag={RRNavLink} exact to="/" id="font-list">
+          <img src={logo} alt="sufferpal logo" width="100"></img>
         </NavLink>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="mr-auto" navbar>
             <NavItem>
-              <NavLink tag={RRNavLink} exact to="/profile">
+              <NavLink id="font-list" tag={RRNavLink} exact to="/profile">
                 Profile
               </NavLink>
             </NavItem>
             <NavItem>
-              <NavLink tag={RRNavLink} exact to="/calendar">
+              <NavLink id="font-list" tag={RRNavLink} exact to="/calendar">
                 Calendar
               </NavLink>
             </NavItem>
             <NavItem>
-              <NavLink tag={RRNavLink} exact to="/timeline">
+              <NavLink id="font-list" tag={RRNavLink} exact to="/timeline">
                 Timeline
               </NavLink>
             </NavItem>
