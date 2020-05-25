@@ -1,4 +1,10 @@
-import { setupMapGeoJSONData, calculatePace, createCustomTimeString, getSplitNumberArray } from './helpers';
+import {
+  setupMapGeoJSONData,
+  calculatePace,
+  createCustomTimeString,
+  getSplitNumberArray,
+  setMapCenterCoordinates,
+} from './helpers';
 
 describe('test setupMapGeoJSONData', () => {
   it('should return array of arrays representating plotted coordinates', () => {
@@ -104,5 +110,22 @@ describe('test getSplitNumberArray', () => {
   it('should return an array of two numbers representing both sides of the decimal', () => {
     expect(getSplitNumberArray(1.233)).toEqual([1, 0.233]);
     expect(getSplitNumberArray(0.899)).toEqual([0, 0.899]);
+  });
+});
+
+describe('test setMapCenterCoordinates', () => {
+  it('should return an array with the center coordinates', () => {
+    expect(
+      setMapCenterCoordinates([
+        [2, 2],
+        [2, 4],
+      ])
+    ).toEqual([2, 3]);
+    expect(
+      setMapCenterCoordinates([
+        [1, 5],
+        [1, 3],
+      ])
+    ).toEqual([1, 4]);
   });
 });

@@ -72,3 +72,15 @@ export const getSplitNumberArray = (time) => {
   const decimalString = timeString.split('.');
   return [parseInt(decimalString[0]), parseFloat(`0.${decimalString[1]}`)];
 };
+
+export const setMapCenterCoordinates = (coordinates) => {
+  console.log(coordinates);
+  const length = coordinates.length;
+  let sumLat = 0;
+  let sumLong = 0;
+  for (let i = 0; i < length; i += 1) {
+    sumLat += coordinates[i][1];
+    sumLong += coordinates[i][0];
+  }
+  return [sumLong / length, sumLat / length];
+};
