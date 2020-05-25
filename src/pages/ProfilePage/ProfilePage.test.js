@@ -6,6 +6,10 @@ import { Provider } from 'react-redux';
 import { store } from '../../store/store';
 import { createMemoryHistory } from 'history';
 
+jest.mock('mapbox-gl/dist/mapbox-gl', () => ({
+  Map: () => ({}),
+}));
+
 test('renders ProfilePage', () => {
   const { getByText } = render(
     <Provider store={store}>
