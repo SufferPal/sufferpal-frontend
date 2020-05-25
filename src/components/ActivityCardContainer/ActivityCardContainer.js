@@ -32,7 +32,19 @@ const ActivityCardContainer = () => {
     fetchUser();
   }, [userID]);
 
-  return 'Hello';
+  return (
+    <>
+      {activities.map((activity, index) => (
+        <ActivityCard
+          key={index}
+          activity={activity}
+          firstName={userFirstName}
+          lastName={userLastName}
+          profilePicture={userProfilePicture}
+        />
+      ))}
+    </>
+  );
 };
 
 export default ActivityCardContainer;
