@@ -1,6 +1,5 @@
 .ActivityCard {
   background-color: #242424;
-  height: 500px;
 
   .user-name,
   .activity-description {
@@ -13,7 +12,19 @@
     border-radius: 50%;
     background-color: #656569;
   }
-  .data-column > h3 {
+  .data-column > div > h3 {
     color: #c3c3c3;
+    font-size: 22px;
+    font-weight: bolder;
+  }
+
+  .data-header-container {
+    border-right: 1px solid gray;
+  }
+
+  .data-label,
+  .units {
+    font-size: 16px;
+    color: #656569;
   }
 }
