@@ -1,0 +1,40 @@
+.Footer {
+  background-color: #1d1d1d;
+  color: #c3d3c3;
+
+  #font-list,
+  .nav {
+    color: #c3c3c3;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+  #footer-brand,
+  .test {
+    color: white;
+    &:hover {
+      color: green;
+    }
+  }
+  img {
+    height: 50%;
+    width: 50%;
+    object-fit: cover;
+  }
+  a {
+    color: purple;
+  }
+}
+
+.Col-format {
+  margin: auto;
+  width: 100%;
+  //border: 3px solid green;
+  padding: 10px;
+}
+
+.foot-description {
+  color: #c3c3c3;
+  font-size: 10px;
+  letter-spacing: 1px;
+}
