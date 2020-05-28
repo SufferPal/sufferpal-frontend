@@ -10,6 +10,11 @@
       "StackName": "amplify-sufferpal-dev-135325",
       "StackId": "arn:aws:cloudformation:us-east-2:013995497548:stack/amplify-sufferpal-dev-135325/5f1e9ef0-8d6f-11ea-854b-02d970724e3a",
       "AmplifyAppId": "d1msy21q64qdnx"
+    },
+    "categories": {
+      "auth": {
+        "sufferpal11a4676d": {}
+      }
     }
   }
 }

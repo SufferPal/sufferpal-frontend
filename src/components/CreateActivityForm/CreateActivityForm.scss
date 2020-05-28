@@ -1,0 +1,55 @@
+.CreateActivityForm {
+  background-color: #242424;
+
+  .upload-cont,
+  .description-form-grp {
+    background-color: #2a2a2a;
+    width: 70%;
+  }
+
+  .description-submit-cont {
+    .descr-label {
+      color: #656569;
+    }
+
+    .submit-btn {
+      background-color: #2a2a2a;
+      color: #656569;
+      border-radius: 0;
+      border: none;
+
+      &:hover {
+        background-color: #2a2a2a;
+      }
+    }
+  }
+
+  .upload-cont {
+    .upload-label {
+      color: #656569;
+    }
+
+    .upload-text > p {
+      color: #656569;
+    }
+
+    .upload-text {
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    .fit-file-dropped-text,
+    .fit-file-dropped-header {
+      color: #656569;
+    }
+
+    .fit-file-dropped-text {
+      font-size: 12.8px;
+    }
+
+    .fit-file-dropped-header {
+      font-size: 16px;
+    }
+  }
+}

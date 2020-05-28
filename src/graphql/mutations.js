@@ -9,6 +9,36 @@ export const createUser = /* GraphQL */ `
       lastName
       email
       phoneNumber
+      gender
+      age
+      profilePictureS3FileKey
+      weight
+      maxHeartRate
+      friends
+      bestTime10K
+      bestTime5K
+      bestTime1K
+      bestTime1Mile
+      activities {
+        items {
+          id
+          userID
+          totalCalories
+          startTime
+          totalMovingTime
+          maxCadence
+          minHeartRate
+          avgSpeed
+          maxHeartRate
+          totalDistance
+          avgCadence
+          avgHeartRate
+          sport
+          rawMeasurementsS3FileKey
+          description
+        }
+        nextToken
+      }
     }
   }
 `;
@@ -20,6 +50,36 @@ export const updateUser = /* GraphQL */ `
       lastName
       email
       phoneNumber
+      gender
+      age
+      profilePictureS3FileKey
+      weight
+      maxHeartRate
+      friends
+      bestTime10K
+      bestTime5K
+      bestTime1K
+      bestTime1Mile
+      activities {
+        items {
+          id
+          userID
+          totalCalories
+          startTime
+          totalMovingTime
+          maxCadence
+          minHeartRate
+          avgSpeed
+          maxHeartRate
+          totalDistance
+          avgCadence
+          avgHeartRate
+          sport
+          rawMeasurementsS3FileKey
+          description
+        }
+        nextToken
+      }
     }
   }
 `;
@@ -31,6 +91,36 @@ export const deleteUser = /* GraphQL */ `
       lastName
       email
       phoneNumber
+      gender
+      age
+      profilePictureS3FileKey
+      weight
+      maxHeartRate
+      friends
+      bestTime10K
+      bestTime5K
+      bestTime1K
+      bestTime1Mile
+      activities {
+        items {
+          id
+          userID
+          totalCalories
+          startTime
+          totalMovingTime
+          maxCadence
+          minHeartRate
+          avgSpeed
+          maxHeartRate
+          totalDistance
+          avgCadence
+          avgHeartRate
+          sport
+          rawMeasurementsS3FileKey
+          description
+        }
+        nextToken
+      }
     }
   }
 `;
@@ -38,6 +128,7 @@ export const createActivity = /* GraphQL */ `
   mutation CreateActivity($input: CreateActivityInput!, $condition: ModelActivityConditionInput) {
     createActivity(input: $input, condition: $condition) {
       id
+      userID
       totalCalories
       startTime
       totalMovingTime
@@ -49,6 +140,8 @@ export const createActivity = /* GraphQL */ `
       avgCadence
       avgHeartRate
       sport
+      rawMeasurementsS3FileKey
+      description
     }
   }
 `;
@@ -56,6 +149,7 @@ export const updateActivity = /* GraphQL */ `
   mutation UpdateActivity($input: UpdateActivityInput!, $condition: ModelActivityConditionInput) {
     updateActivity(input: $input, condition: $condition) {
       id
+      userID
       totalCalories
       startTime
       totalMovingTime
@@ -67,6 +161,8 @@ export const updateActivity = /* GraphQL */ `
       avgCadence
       avgHeartRate
       sport
+      rawMeasurementsS3FileKey
+      description
     }
   }
 `;
@@ -74,6 +170,7 @@ export const deleteActivity = /* GraphQL */ `
   mutation DeleteActivity($input: DeleteActivityInput!, $condition: ModelActivityConditionInput) {
     deleteActivity(input: $input, condition: $condition) {
       id
+      userID
       totalCalories
       startTime
       totalMovingTime
@@ -85,6 +182,8 @@ export const deleteActivity = /* GraphQL */ `
       avgCadence
       avgHeartRate
       sport
+      rawMeasurementsS3FileKey
+      description
     }
   }
 `;

@@ -1,14 +1,27 @@
 .Header {
-  // #header-brand,
-  // .test {
-  //   // color: blue;
+  background-color: #1d1d1d;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 500;
 
-  //   &:hover {
-  //     color: green;
-  //   }
-  // }
+  #font-list,
+  .nav {
+    color: white;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+    position: sticky;
+  }
+  #header-brand,
+  .test {
+    color: white;
+    &:hover {
+      color: green;
+    }
+  }
 
-  // a {
-  //   color: purple;
-  // }
+  a {
+    color: purple;
+  }
 }

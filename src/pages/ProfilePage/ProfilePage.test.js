@@ -1,15 +1,25 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import ProfilePage from './ProfilePage';
+import ProfilePage from '../ProfilePage/ProfilePage';
 import { Router } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { store } from '../../store/store';
 import { createMemoryHistory } from 'history';
 
-test('renders learn react link', () => {
+jest.mock('mapbox-gl/dist/mapbox-gl', () => ({
+  Map: () => ({}),
+}));
+
+test('renders ProfilePage', () => {
   const { getByText } = render(
-    <Router history={createMemoryHistory({ initialEntries: ['/profile'] })}>
-      <ProfilePage />
-    </Router>
+    <Provider store={store}>
+      <Router history={createMemoryHistory({ initialEntries: ['/'] })}>
+        <ProfilePage />
+      </Router>
+    </Provider>
   );
-  const mainPageText = getByText(/profilepage/i);
-  expect(mainPageText).toBeInTheDocument();
+  const profilePageText = getByText(/your activities/i);
+  expect(profilePageText).toBeInTheDocument();
+  const createActivityFormText = getByText(/fit file dropbox/i);
+  expect(createActivityFormText).toBeInTheDocument();
 });

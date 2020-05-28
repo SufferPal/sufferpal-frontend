@@ -2,14 +2,17 @@ import React from 'react';
 import Header from '../../components/Header/Header';
 import { Container } from 'reactstrap';
 import PropTypes from 'prop-types';
+import Footer from '../../components/Footer/Footer';
+import './DefaultTemplate.scss';
 
 const DefaultTemplate = ({ children }) => {
   return (
     <>
       <Header />
-      <main>
+      <main className="ContainerStyles">
         <Container>{children}</Container>
       </main>
+      <Footer />
     </>
   );
 };
