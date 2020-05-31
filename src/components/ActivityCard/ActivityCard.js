@@ -13,7 +13,6 @@ const ActivityCard = (props) => {
   const history = useHistory();
 
   useEffect(() => {
-    console.log('activity', activity);
     Storage.get(rawMeasurementsS3FileKey, { download: true }).then((result) => {
       setRawMeasurements(result.Body);
     });

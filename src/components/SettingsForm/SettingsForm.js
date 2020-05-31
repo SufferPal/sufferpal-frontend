@@ -42,25 +42,21 @@ const SettingsForm = (props) => {
   const handleFirstNameOnChange = (event) => {
     const { value } = event.target;
     setFirstName(value);
-    console.log(value);
   };
 
   const handleLastNameOnChange = (event) => {
     const { value } = event.target;
     setLastName(value);
-    console.log(value);
   };
 
   const handleWeightOnChange = (event) => {
     const { value } = event.target;
     setWeight(value);
-    console.log(value);
   };
 
   const profilePicutureHandlerOnChange = (event) => {
     const value = event.target.files[0];
     setProfilePic(value);
-    console.log(profilePic);
   };
 
   const checkUpdates = () => {
@@ -91,7 +87,6 @@ const SettingsForm = (props) => {
         };
         updateWeight();
       }
-      console.log(firstName, lastName, weight);
       const blob = new Blob([profilePic], { type: 'image/jpg' });
       const profilePictureName = `profilePictures/${userID}/pic_${Date.now()}`;
       Storage.put(profilePictureName, blob);

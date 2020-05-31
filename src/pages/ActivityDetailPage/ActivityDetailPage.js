@@ -7,8 +7,6 @@ const ActivityDetailPage = () => {
   const location = useLocation();
   const activityState = location.state?.activity;
 
-  console.log(activityState);
-
   return (
     <DefaultTemplate>
       <div className="ActivityDetailPage pt-4">

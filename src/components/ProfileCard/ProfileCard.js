@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, CardImg, Table, CardText, CardBody, CardTitle, Button } from 'reactstrap';
+import { Card, CardImg, Table, CardBody, CardTitle, Button } from 'reactstrap';
 import SettingsModal from '../SettingsModal/SettingsModal';
 import './ProfileCard.scss';
 import ProfilePic from './runner-image.jpeg';
@@ -7,15 +7,17 @@ import { useSelector } from 'react-redux';
 import { API, graphqlOperation } from 'aws-amplify';
 import { getUser } from '../../graphql/queries';
 
-const ProfileCard = (props) => {
+const ProfileCard = () => {
   const userID = useSelector((state) => state.user.id);
   const [userData, setUserData] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const toggleSettingsModal = () => setIsModalOpen(!isModalOpen);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const userDataFromCall = await API.graphql(graphqlOperation(getUser, { id: userID }));
-        console.log(userDataFromCall);
         setUserData(userDataFromCall.data.getUser);
       } catch (error) {
         console.log(error);
@@ -57,7 +59,10 @@ const ProfileCard = (props) => {
               </tbody>
             </Table>
           </div>
-          <SettingsModal />
+          <Button color="danger" onClick={toggleSettingsModal}>
+            Edit
+          </Button>
+          <SettingsModal isModalOpen={isModalOpen} toggleSettingsModal={toggleSettingsModal} />
         </CardBody>
       </Card>
     </div>
