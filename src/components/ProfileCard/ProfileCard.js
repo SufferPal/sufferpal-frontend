@@ -62,7 +62,7 @@ const ProfileCard = () => {
           <Button color="danger" onClick={toggleSettingsModal}>
             Edit
           </Button>
-          <SettingsModal isModalOpen={isModalOpen} toggleSettingsModal={toggleSettingsModal} />
+          <SettingsModal isModalOpen={isModalOpen} toggleSettingsModal={toggleSettingsModal} userData={userData} />
         </CardBody>
       </Card>
     </div>

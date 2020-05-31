@@ -1,43 +1,91 @@
 import React, { useEffect, useState } from 'react';
-import { Form, FormGroup, Label, Input, FormText, Button } from 'reactstrap';
+import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { useSelector } from 'react-redux';
 import { API, graphqlOperation } from 'aws-amplify';
-import { getUser } from '../../graphql/queries';
+// import { getUser } from '../../graphql/queries';
 import { updateUser } from '../../graphql/mutations';
 import Storage from '@aws-amplify/storage';
 
 const SettingsForm = (props) => {
+  const { userData, toggleSettingsModal } = props;
   const userID = useSelector((state) => state.user.id);
-  const [userData, setUserData] = useState({});
-  const [updatedUserData, setUpdatedUserData] = useState({});
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [weight, setWeight] = useState(0);
-  const [profilePic, setProfilePic] = useState({});
+  // const [userData, setUserData] = useState({});
+  // const [updatedUserData, setUpdatedUserData] = useState({});
+  const [firstName, setFirstName] = useState(userData.firstName);
+  const [lastName, setLastName] = useState(userData.lastName);
+  const [weight, setWeight] = useState(userData.weight);
+  const [profilePic, setProfilePic] = useState(null);
+  // const [equippedGear, setEquippedGear] = useState();
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        await API.graphql(
-          graphqlOperation(updateUser, {
-            input: {
-              id: '6c57fb6a-3ec6-4c67-a205-8323952c8293',
-              weight: weight,
-              firstName: firstName,
-              lastName: lastName,
-            },
-          })
-        );
-        const userDataFromCall = await API.graphql(graphqlOperation(getUser, { id: userID }));
-        console.log(userDataFromCall);
-        setUserData(userDataFromCall.data.getUser);
-        setUpdatedUserData(userDataFromCall.data.getUser);
-      } catch (error) {
-        console.log(error);
+  const updateUserSettings = async (userSettings) => {
+    await API.graphql(
+      graphqlOperation(updateUser, {
+        input: userSettings,
+      })
+    );
+  };
+
+  const handleUserSettingsEditSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      const profilePictureName = `profilePictures/${userID}/pic_${Date.now()}`;
+      const updatedUserSettings = {
+        id: userID,
+        firstName,
+        lastName,
+        weight,
+      };
+
+      if (profilePic) {
+        Storage.put(profilePictureName, profilePic).then((result) => {
+          updatedUserSettings['profilePictureS3FileKey'] = result.key;
+
+          updateUserSettings(updatedUserSettings).then(() => {
+            toggleSettingsModal();
+          });
+        });
+      } else {
+        updateUserSettings(updatedUserSettings).then(() => {
+          toggleSettingsModal();
+        });
       }
-    };
-    fetchUser();
-  }, []);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // useEffect(() => {
+  //   const { firstName, lastName, weight } = userData;
+
+  //   setFirstName(firstName);
+  //   setLastName(lastName);
+  //   setWeight(weight);
+  // }, []);
+
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     try {
+  //       await API.graphql(
+  //         graphqlOperation(updateUser, {
+  //           input: {
+  //             id: '6c57fb6a-3ec6-4c67-a205-8323952c8293',
+  //             weight: weight,
+  //             firstName: firstName,
+  //             lastName: lastName,
+  //           },
+  //         })
+  //       );
+  //       const userDataFromCall = await API.graphql(graphqlOperation(getUser, { id: userID }));
+  //       console.log(userDataFromCall);
+  //       setUserData(userDataFromCall.data.getUser);
+  //       // setUpdatedUserData(userDataFromCall.data.getUser);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   fetchUser();
+  // }, []);
 
   const handleFirstNameOnChange = (event) => {
     const { value } = event.target;
@@ -51,102 +99,72 @@ const SettingsForm = (props) => {
 
   const handleWeightOnChange = (event) => {
     const { value } = event.target;
-    setWeight(value);
+    const weight = parseFloat(value);
+    console.log(weight);
+    setWeight(weight);
   };
 
-  const profilePicutureHandlerOnChange = (event) => {
+  const handleProfilePicutureUpload = (event) => {
     const value = event.target.files[0];
+    console.log(value);
     setProfilePic(value);
   };
 
-  const checkUpdates = () => {
-    try {
-      if (firstName != '') {
-        const updateFirstName = async () => {
-          await API.graphql(
-            graphqlOperation(updateUser, {
-              input: { id: '6c57fb6a-3ec6-4c67-a205-8323952c8293', firstName: firstName },
-            })
-          );
-        };
-        updateFirstName();
-      }
-      if (lastName != '') {
-        const updateLastName = async () => {
-          await API.graphql(
-            graphqlOperation(updateUser, { input: { id: '6c57fb6a-3ec6-4c67-a205-8323952c8293', lastName: lastName } })
-          );
-        };
-        updateLastName();
-      }
-      if (weight != 0) {
-        const updateWeight = async () => {
-          await API.graphql(
-            graphqlOperation(updateUser, { input: { id: '6c57fb6a-3ec6-4c67-a205-8323952c8293', weight: weight } })
-          );
-        };
-        updateWeight();
-      }
-      const blob = new Blob([profilePic], { type: 'image/jpg' });
-      const profilePictureName = `profilePictures/${userID}/pic_${Date.now()}`;
-      Storage.put(profilePictureName, blob);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const checkUpdates = () => {
+  //   try {
+  //     if (firstName != '') {
+  //       const updateFirstName = async () => {
+  //         await API.graphql(
+  //           graphqlOperation(updateUser, {
+  //             input: { id: '6c57fb6a-3ec6-4c67-a205-8323952c8293', firstName: firstName },
+  //           })
+  //         );
+  //       };
+  //       updateFirstName();
+  //     }
+  //     if (lastName != '') {
+  //       const updateLastName = async () => {
+  //         await API.graphql(
+  //           graphqlOperation(updateUser, { input: { id: '6c57fb6a-3ec6-4c67-a205-8323952c8293', lastName: lastName } })
+  //         );
+  //       };
+  //       updateLastName();
+  //     }
+  //     if (weight != 0) {
+  //       const updateWeight = async () => {
+  //         await API.graphql(
+  //           graphqlOperation(updateUser, { input: { id: '6c57fb6a-3ec6-4c67-a205-8323952c8293', weight: weight } })
+  //         );
+  //       };
+  //       updateWeight();
+  //     }
+  //     const blob = new Blob([profilePic], { type: 'image/jpg' });
+  //     const profilePictureName = `profilePictures/${userID}/pic_${Date.now()}`;
+  //     Storage.put(profilePictureName, blob);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   return (
-    <Form>
+    <Form onSubmit={handleUserSettingsEditSubmit}>
       <FormGroup>
-        <Label for="exampleFile">File</Label>
-        <Input type="file" name="file" id="exampleFile" onChange={profilePicutureHandlerOnChange} />
-        <FormText color="muted">
-          This is some placeholder block-level help text for the above input. It's a bit lighter and easily wraps to a
-          new line.
-        </FormText>
+        <Label for="profilePicture">Profile Picture</Label>
+        <Input type="file" name="Profile Picture" id="profilePicture" onChange={handleProfilePicutureUpload} />
       </FormGroup>
       <FormGroup>
         <Label for="firstName">First Name</Label>
-        <Input
-          type="text"
-          name="FirstName"
-          id="firstName"
-          placeholder={userData.firstName}
-          onChange={handleFirstNameOnChange}
-        />
+        <Input value={firstName} type="text" name="First Name" id="firstName" onChange={handleFirstNameOnChange} />
       </FormGroup>
       <FormGroup>
         <Label for="lastName">Last Name</Label>
-        <Input
-          type="text"
-          name="lastName"
-          id="lastname"
-          placeholder={userData.lastName}
-          onChange={handleLastNameOnChange}
-        />
-      </FormGroup>
-      <FormGroup tag="fieldset">
-        <legend>Gender</legend>
-        <FormGroup check>
-          <Label check>
-            <Input type="radio" name="radio1" /> Male
-          </Label>
-        </FormGroup>
-        <FormGroup check>
-          <Label check>
-            <Input type="radio" name="radio1" /> Female
-          </Label>
-        </FormGroup>
+        <Input value={lastName} type="text" name="Last Name" id="lastname" onChange={handleLastNameOnChange} />
       </FormGroup>
       <FormGroup>
         <Label for="weight">Weight</Label>
-        <Input type="number" name="number" id="weight" placeholder={userData.weight} onChange={handleWeightOnChange} />
+        <Input value={weight} type="number" name="Weight" id="weight" onChange={handleWeightOnChange} />
       </FormGroup>
-      <FormGroup>
-        <Label for="exampleDate">Birth Date</Label>
-        <Input type="date" name="birthDate" id="birthDate" placeholder="06/04/1989" />
-      </FormGroup>
-      <FormGroup>
+      {/* <FormGroup>
         <Label for="exampleSelect">Equip Gear</Label>
         <Input type="select" name="gear" id="gear">
           <option>1</option>
@@ -155,10 +173,11 @@ const SettingsForm = (props) => {
           <option>4</option>
           <option>5</option>
         </Input>
-      </FormGroup>
-      <Button color="primary" onClick={checkUpdates}>
-        Do Something
-      </Button>{' '}
+      </FormGroup> */}
+      <Button color="primary">Submit</Button>
+      <Button color="secondary" onClick={toggleSettingsModal}>
+        Cancel
+      </Button>
     </Form>
   );
 };
