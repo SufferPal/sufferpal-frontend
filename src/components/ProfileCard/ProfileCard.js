@@ -12,8 +12,22 @@ const ProfileCard = () => {
   const [userData, setUserData] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [profilePictureURL, setProfilePictureURL] = useState(null);
+  const [equippedGear, setEquippedGear] = useState('');
 
   const toggleSettingsModal = () => setIsModalOpen(!isModalOpen);
+
+  const determineEquippedGear = useCallback(() => {
+    const gear = userData?.gear?.items;
+
+    if (gear) {
+      // eslint-disable-next-line no-unused-expressions
+      const equippedGear = gear.filter((gear) => {
+        return gear.isEquipped;
+      });
+
+      return `${equippedGear[0].brand} ${equippedGear[0].model}`;
+    }
+  }, [userData]);
 
   const fetchUser = useCallback(async () => {
     try {
@@ -32,6 +46,11 @@ const ProfileCard = () => {
   useEffect(() => {
     fetchUser();
   }, [fetchUser]);
+
+  useEffect(() => {
+    console.log(determineEquippedGear());
+    setEquippedGear(determineEquippedGear());
+  }, [userData, determineEquippedGear]);
 
   return (
     <div className="ProfileCard">
@@ -61,7 +80,7 @@ const ProfileCard = () => {
                   <th scope="row" className="setting-labels">
                     Equipped Gear:
                   </th>
-                  <td>endpoint for Equipped Gear</td>
+                  <td>{equippedGear}</td>
                 </tr>
               </tbody>
             </Table>
