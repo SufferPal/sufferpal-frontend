@@ -2,16 +2,9 @@
 import React from 'react';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import SettingsForm from '../SettingsForm/SettingsForm';
-import { API, graphqlOperation } from 'aws-amplify';
-import { createGear } from '../../graphql/mutations';
-import { useSelector } from 'react-redux';
 
 const SettingsModal = (props) => {
   const { userData, fetchUser } = props;
-  const userID = useSelector((state) => state.user.id);
-  const addGear = async (gear) => {
-    await API.graphql(graphqlOperation(createGear, { input: gear }));
-  };
 
   return (
     <div className="SettingsModal">

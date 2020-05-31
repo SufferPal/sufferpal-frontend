@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Card, CardImg, Table, CardBody, CardTitle, Button } from 'reactstrap';
 import SettingsModal from '../SettingsModal/SettingsModal';
+import AddGearModal from '../AddGearModal/AddGearModal';
 import './ProfileCard.scss';
 import { useSelector } from 'react-redux';
 import { API, graphqlOperation } from 'aws-amplify';
@@ -13,8 +14,11 @@ const ProfileCard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [profilePictureURL, setProfilePictureURL] = useState(null);
   const [equippedGear, setEquippedGear] = useState('');
+  const [isAddGearModalOpen, setIsAddGearModalOpen] = useState(false);
 
   const toggleSettingsModal = () => setIsModalOpen(!isModalOpen);
+
+  const toggleAddGearModal = () => setIsAddGearModalOpen(!isAddGearModalOpen);
 
   const determineEquippedGear = useCallback(() => {
     const gear = userData?.gear?.items;
@@ -88,9 +92,18 @@ const ProfileCard = () => {
           <Button color="danger" onClick={toggleSettingsModal}>
             Edit
           </Button>
+          <Button color="success" onClick={toggleAddGearModal}>
+            Add Gear
+          </Button>
           <SettingsModal
             isModalOpen={isModalOpen}
             toggleSettingsModal={toggleSettingsModal}
+            userData={userData}
+            fetchUser={fetchUser}
+          />
+          <AddGearModal
+            isModalOpen={isAddGearModalOpen}
+            toggleAddGearModal={toggleAddGearModal}
             userData={userData}
             fetchUser={fetchUser}
           />
