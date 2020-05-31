@@ -1,35 +1,42 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Card, CardImg, Table, CardBody, CardTitle, Button } from 'reactstrap';
 import SettingsModal from '../SettingsModal/SettingsModal';
 import './ProfileCard.scss';
-import ProfilePic from './runner-image.jpeg';
 import { useSelector } from 'react-redux';
 import { API, graphqlOperation } from 'aws-amplify';
+import Storage from '@aws-amplify/storage';
 import { getUser } from '../../graphql/queries';
 
 const ProfileCard = () => {
   const userID = useSelector((state) => state.user.id);
   const [userData, setUserData] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [profilePictureURL, setProfilePictureURL] = useState(null);
 
   const toggleSettingsModal = () => setIsModalOpen(!isModalOpen);
 
+  const fetchUser = useCallback(async () => {
+    try {
+      const userDataFromCall = await API.graphql(graphqlOperation(getUser, { id: userID }));
+      const userData = userDataFromCall.data.getUser;
+      const { profilePictureS3FileKey } = userData;
+      Storage.get(profilePictureS3FileKey).then((result) => {
+        setProfilePictureURL(result);
+        setUserData(userData);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }, [userID]);
+
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const userDataFromCall = await API.graphql(graphqlOperation(getUser, { id: userID }));
-        setUserData(userDataFromCall.data.getUser);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     fetchUser();
-  }, []);
+  }, [fetchUser]);
 
   return (
-    <div className="ProfileCardDiv">
-      <Card className="card">
-        <CardImg top width="100%" src={ProfilePic} alt="Card image cap" />
+    <div className="ProfileCard">
+      <Card className="card pt-3 profile-card-inner">
+        <CardImg top className="profile-picture" src={profilePictureURL} alt="Card image cap" />
         <CardBody>
           <CardTitle className="font-styles">
             {userData.firstName} {userData.lastName}
@@ -62,7 +69,12 @@ const ProfileCard = () => {
           <Button color="danger" onClick={toggleSettingsModal}>
             Edit
           </Button>
-          <SettingsModal isModalOpen={isModalOpen} toggleSettingsModal={toggleSettingsModal} userData={userData} />
+          <SettingsModal
+            isModalOpen={isModalOpen}
+            toggleSettingsModal={toggleSettingsModal}
+            userData={userData}
+            fetchUser={fetchUser}
+          />
         </CardBody>
       </Card>
     </div>

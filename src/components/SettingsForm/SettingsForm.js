@@ -7,7 +7,7 @@ import { updateUser } from '../../graphql/mutations';
 import Storage from '@aws-amplify/storage';
 
 const SettingsForm = (props) => {
-  const { userData, toggleSettingsModal } = props;
+  const { userData, toggleSettingsModal, fetchUser } = props;
   const userID = useSelector((state) => state.user.id);
   // const [userData, setUserData] = useState({});
   // const [updatedUserData, setUpdatedUserData] = useState({});
@@ -42,11 +42,13 @@ const SettingsForm = (props) => {
           updatedUserSettings['profilePictureS3FileKey'] = result.key;
 
           updateUserSettings(updatedUserSettings).then(() => {
+            fetchUser();
             toggleSettingsModal();
           });
         });
       } else {
         updateUserSettings(updatedUserSettings).then(() => {
+          fetchUser();
           toggleSettingsModal();
         });
       }

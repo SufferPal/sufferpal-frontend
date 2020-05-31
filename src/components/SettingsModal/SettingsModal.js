@@ -7,7 +7,7 @@ import { createGear } from '../../graphql/mutations';
 import { useSelector } from 'react-redux';
 
 const SettingsModal = (props) => {
-  const { userData } = props;
+  const { userData, fetchUser } = props;
   const userID = useSelector((state) => state.user.id);
   const addGear = async (gear) => {
     await API.graphql(graphqlOperation(createGear, { input: gear }));
@@ -18,7 +18,7 @@ const SettingsModal = (props) => {
       <Modal isOpen={props.isModalOpen} toggle={props.toggleSettingsModal}>
         <ModalHeader toggle={props.toggleSettingsModal}>Edit User</ModalHeader>
         <ModalBody>
-          <SettingsForm toggleSettingsModal={props.toggleSettingsModal} userData={userData} />
+          <SettingsForm toggleSettingsModal={props.toggleSettingsModal} userData={userData} fetchUser={fetchUser} />
         </ModalBody>
       </Modal>
     </div>
