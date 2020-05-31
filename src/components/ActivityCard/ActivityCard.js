@@ -4,20 +4,33 @@ import { Row, Col } from 'reactstrap';
 import { calculatePace, createCustomTimeString } from '../../shared/functions/helpers';
 import MapContainer from '../Map/MapContainer';
 import Storage from '@aws-amplify/storage';
+import { useHistory } from 'react-router-dom';
 
 const ActivityCard = (props) => {
   const { firstName, lastName, profilePicture, activity } = props;
   const { avgHeartRate, totalMovingTime, totalDistance, description, rawMeasurementsS3FileKey } = activity;
   const [rawMeasurements, setRawMeasurements] = useState([]);
+  const history = useHistory();
+
   useEffect(() => {
+    console.log('activity', activity);
     Storage.get(rawMeasurementsS3FileKey, { download: true }).then((result) => {
       setRawMeasurements(result.Body);
     });
   }, []);
 
+  const handleActivityCardClick = () => {
+    history.push({
+      pathname: `/activity/${activity.id}`,
+      state: {
+        activity,
+      },
+    });
+  };
+
   return (
     <div className="ActivityCard w-100 py-2 px-4 mb-3">
-      <Row>
+      <Row onClick={handleActivityCardClick}>
         <Col sm="3" className="d-flex flex-column justify-content-start align-items-center">
           <div className="profile-picture-container mb-2 "></div>
           <h3 className="user-name mb-2">
