@@ -11,10 +11,15 @@ const ActivityCard = (props) => {
   const { avgHeartRate, totalMovingTime, totalDistance, description, rawMeasurementsS3FileKey } = activity;
   const [rawMeasurements, setRawMeasurements] = useState([]);
   const history = useHistory();
+  const [profilePictureURL, setProfilePictureURL] = useState('');
 
   useEffect(() => {
+    console.log(profilePicture);
     Storage.get(rawMeasurementsS3FileKey, { download: true }).then((result) => {
       setRawMeasurements(result.Body);
+    });
+    Storage.get(profilePicture).then((result) => {
+      setProfilePictureURL(result);
     });
   }, []);
 
@@ -31,7 +36,7 @@ const ActivityCard = (props) => {
     <div className="ActivityCard w-100 py-2 px-4 mb-3">
       <Row onClick={handleActivityCardClick}>
         <Col sm="3" className="d-flex flex-column justify-content-start align-items-center">
-          <div className="profile-picture-container mb-2 "></div>
+          <img className="profile-picture-container mb-2 " src={profilePictureURL} alt="profilePicture" />
           <h3 className="user-name mb-2">
             {firstName} {lastName}
           </h3>
