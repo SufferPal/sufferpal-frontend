@@ -11,9 +11,9 @@ const ActivityDetailPage = () => {
 
   const [rawMeasurements, setRawMeasurements] = useState([]);
   const S3_Key = activityState.rawMeasurementsS3FileKey;
-  const speedData = [[]];
-  const HRData = [[]];
-  const cadenceData = [[]];
+  const speedData = [{}];
+  const HRData = [{}];
+  const cadenceData = [{}];
 
   useEffect(() => {
     //console.log('activity', activity);
@@ -26,13 +26,13 @@ const ActivityDetailPage = () => {
     for (let i = 1; i < rawMeasurements.length; i++) {
       //console.log(rawMeasurements[i].speed);
       if (rawMeasurements[i].speed !== null) {
-        speedData.push([rawMeasurements[i].speed, rawMeasurements[i].distance]);
+        speedData.push({ distance: rawMeasurements[i].distance, speed: rawMeasurements[i].speed });
       }
       if (rawMeasurements[i].speed !== null) {
-        HRData.push([rawMeasurements[i].heart_rate, rawMeasurements[i].distance]);
+        HRData.push({ distance: rawMeasurements[i].distance, heart_rate: rawMeasurements[i].heart_rate });
       }
       if (rawMeasurements[i].speed !== null) {
-        cadenceData.push([rawMeasurements[i].cadence, rawMeasurements[i].distance]);
+        cadenceData.push({ distance: rawMeasurements[i].distance, cadence: rawMeasurements[i].distance });
       }
     }
   };
