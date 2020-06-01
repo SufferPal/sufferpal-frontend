@@ -2,7 +2,8 @@ import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { API, graphqlOperation } from 'aws-amplify';
 import Storage from '@aws-amplify/storage';
-import { createActivity } from '../../graphql/mutations';
+import { createActivity, updateGear } from '../../graphql/mutations';
+import { listGears } from '../../graphql/queries';
 import FitParser from 'fit-file-parser';
 import { useSelector } from 'react-redux';
 import { Button, Form, FormGroup, Label, Input, FormText, Alert } from 'reactstrap';
@@ -53,10 +54,39 @@ const CreateActivityForm = () => {
   const addActivity = async (activity) => {
     await API.graphql(graphqlOperation(createActivity, { input: activity }));
   };
+  const updateGearData = async (gearData) => {
+    await API.graphql(graphqlOperation(updateGear, { input: gearData }));
+  };
+  const listGear = async () => {
+    return await API.graphql(graphqlOperation(listGears, { filter: { userID: { eq: userID } } }));
+  };
 
   const handleCreateActivityFormSubmit = (event) => {
     event.preventDefault();
     event.target.reset();
+    // get list of gear
+    // find equipped gear id
+    // call update gear with distance from data
+    listGear().then((result) => {
+      console.log(result);
+      const gearArray = result.data.listGears.items;
+      let equippedGearID = '';
+      let equippedGearDistance = 0;
+      for (let i = 0; i < gearArray.length; i += 1) {
+        if (gearArray[i].isEquipped) {
+          equippedGearID = gearArray[i].id;
+          equippedGearDistance = gearArray[i].distance;
+        }
+      }
+      console.log(equippedGearID);
+      const newTotalDistance = equippedGearDistance + activity?.sessions[0]?.total_distance;
+      const updatedGearData = {
+        userID,
+        id: equippedGearID,
+        distance: newTotalDistance,
+      };
+      updateGearData(updatedGearData);
+    });
 
     setActivityDescription('');
     setActivity({});

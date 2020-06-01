@@ -45,19 +45,13 @@ const SettingsForm = (props) => {
 
     try {
       const profilePictureName = `profilePictures/${userID}/pic_${Date.now()}`;
+      console.log(profilePictureName);
       const updatedUserSettings = {
         id: userID,
         firstName,
         lastName,
         weight,
       };
-
-      if (profilePic) {
-        Storage.put(profilePictureName, profilePic).then((result) => {
-          updatedUserSettings['profilePictureS3FileKey'] = result.key;
-        });
-      }
-
       if (gear) {
         gear.forEach((gear) => {
           const updatedGearData = {
@@ -70,10 +64,21 @@ const SettingsForm = (props) => {
         });
       }
 
-      updateUserSettings(updatedUserSettings).then(() => {
-        fetchUser();
-        toggleSettingsModal();
-      });
+      if (profilePic) {
+        Storage.put(profilePictureName, profilePic).then((result) => {
+          console.log(result.key);
+          updatedUserSettings['profilePictureS3FileKey'] = result.key;
+          updateUserSettings(updatedUserSettings).then(() => {
+            fetchUser();
+            toggleSettingsModal();
+          });
+        });
+      } else {
+        updateUserSettings(updatedUserSettings).then(() => {
+          fetchUser();
+          toggleSettingsModal();
+        });
+      }
     } catch (error) {
       console.log(error);
     }
