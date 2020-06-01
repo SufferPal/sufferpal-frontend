@@ -4,24 +4,24 @@ import { XYPlot, LineSeries, VerticalGridLines, HorizontalGridLines, XAxis, YAxi
 
 //import { useLocation } from 'react-router-dom';
 
-const SpeedGraph = (activity) => {
+const HeartRateGraph = (activity) => {
   //console.log('speedData record', activity);
-  console.log('speedData record', activity.activity);
-  console.log('speedData record', activity.activity[1]);
+  console.log('HR record', activity.activity);
+  console.log('HR record', activity.activity[1]);
 
   const data = activity.activity;
 
   return (
     <div>
       <XYPlot height={300} width={700}>
-        <VerticalGridLines color="blue" />
+        <VerticalGridLines />
         <HorizontalGridLines />
         <XAxis title="distance" />
-        <YAxis title="speed" />
-        <LineSeries getNull={(d) => d.y !== null} data={data} color="33E3FF" strokeWidth="1px" />
+        <YAxis title="heart rate" />
+        <LineSeries getNull={(d) => d.y !== null} data={data} color="DC4242" strokeWidth="1px" />
       </XYPlot>
     </div>
   );
 };
 
-export default SpeedGraph;
+export default HeartRateGraph;

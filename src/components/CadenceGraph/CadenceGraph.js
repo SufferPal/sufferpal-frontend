@@ -4,24 +4,24 @@ import { XYPlot, LineSeries, VerticalGridLines, HorizontalGridLines, XAxis, YAxi
 
 //import { useLocation } from 'react-router-dom';
 
-const SpeedGraph = (activity) => {
+const CadenceGraph = (activity) => {
   //console.log('speedData record', activity);
-  console.log('speedData record', activity.activity);
-  console.log('speedData record', activity.activity[1]);
+  console.log('Cadence', activity.activity);
+  console.log('Cadence', activity.activity[1]);
 
   const data = activity.activity;
 
   return (
     <div>
       <XYPlot height={300} width={700}>
-        <VerticalGridLines color="blue" />
+        <VerticalGridLines />
         <HorizontalGridLines />
         <XAxis title="distance" />
-        <YAxis title="speed" />
-        <LineSeries getNull={(d) => d.y !== null} data={data} color="33E3FF" strokeWidth="1px" />
+        <YAxis title="cadence" />
+        <LineSeries getNull={(d) => d.y !== null} data={data} color="29C865" strokeWidth="1px" />
       </XYPlot>
     </div>
   );
 };
 
-export default SpeedGraph;
+export default CadenceGraph;
