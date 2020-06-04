@@ -1,31 +1,18 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import SettingsForm, { checkUpdates } from '../SettingsForm/SettingsForm';
+import React from 'react';
+import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import SettingsForm from '../SettingsForm/SettingsForm';
 
 const SettingsModal = (props) => {
-  const [modal, setModal] = useState(false);
-
-  const toggle = () => setModal(!modal);
+  const { userData, fetchUser } = props;
 
   return (
-    <div>
-      <Button color="danger" onClick={toggle}>
-        Edit
-      </Button>
-      <Modal isOpen={modal} toggle={toggle}>
-        <ModalHeader toggle={toggle}>Edit Birthday</ModalHeader>
+    <div className="SettingsModal">
+      <Modal isOpen={props.isModalOpen} toggle={props.toggleSettingsModal}>
+        <ModalHeader toggle={props.toggleSettingsModal}>Edit User</ModalHeader>
         <ModalBody>
-          <SettingsForm />
+          <SettingsForm toggleSettingsModal={props.toggleSettingsModal} userData={userData} fetchUser={fetchUser} />
         </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={toggle}>
-            Do Something
-          </Button>{' '}
-          <Button color="secondary" onClick={toggle}>
-            Cancel
-          </Button>
-        </ModalFooter>
       </Modal>
     </div>
   );

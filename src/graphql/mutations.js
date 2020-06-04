@@ -36,9 +36,27 @@ export const createUser = /* GraphQL */ `
           sport
           rawMeasurementsS3FileKey
           description
+          createdAt
+          updatedAt
         }
         nextToken
       }
+      gear {
+        items {
+          id
+          userID
+          brand
+          model
+          datePurchased
+          isEquipped
+          distance
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -77,9 +95,27 @@ export const updateUser = /* GraphQL */ `
           sport
           rawMeasurementsS3FileKey
           description
+          createdAt
+          updatedAt
         }
         nextToken
       }
+      gear {
+        items {
+          id
+          userID
+          brand
+          model
+          datePurchased
+          isEquipped
+          distance
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -118,9 +154,27 @@ export const deleteUser = /* GraphQL */ `
           sport
           rawMeasurementsS3FileKey
           description
+          createdAt
+          updatedAt
         }
         nextToken
       }
+      gear {
+        items {
+          id
+          userID
+          brand
+          model
+          datePurchased
+          isEquipped
+          distance
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -142,6 +196,8 @@ export const createActivity = /* GraphQL */ `
       sport
       rawMeasurementsS3FileKey
       description
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -163,6 +219,8 @@ export const updateActivity = /* GraphQL */ `
       sport
       rawMeasurementsS3FileKey
       description
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -184,6 +242,53 @@ export const deleteActivity = /* GraphQL */ `
       sport
       rawMeasurementsS3FileKey
       description
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createGear = /* GraphQL */ `
+  mutation CreateGear($input: CreateGearInput!, $condition: ModelGearConditionInput) {
+    createGear(input: $input, condition: $condition) {
+      id
+      userID
+      brand
+      model
+      datePurchased
+      isEquipped
+      distance
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateGear = /* GraphQL */ `
+  mutation UpdateGear($input: UpdateGearInput!, $condition: ModelGearConditionInput) {
+    updateGear(input: $input, condition: $condition) {
+      id
+      userID
+      brand
+      model
+      datePurchased
+      isEquipped
+      distance
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteGear = /* GraphQL */ `
+  mutation DeleteGear($input: DeleteGearInput!, $condition: ModelGearConditionInput) {
+    deleteGear(input: $input, condition: $condition) {
+      id
+      userID
+      brand
+      model
+      datePurchased
+      isEquipped
+      distance
+      createdAt
+      updatedAt
     }
   }
 `;

@@ -90,7 +90,6 @@ export const getSplitNumberArray = (time) => {
 };
 
 export const setMapCenterCoordinates = (coordinates) => {
-  console.log(coordinates);
   const length = coordinates.length;
   let sumLat = 0;
   let sumLong = 0;

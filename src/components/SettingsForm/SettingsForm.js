@@ -1,169 +1,160 @@
-import React, { useEffect, useState } from 'react';
-import { Form, FormGroup, Label, Input, FormText, Button } from 'reactstrap';
+import React, { useState, useEffect } from 'react';
+import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { useSelector } from 'react-redux';
 import { API, graphqlOperation } from 'aws-amplify';
-import { getUser } from '../../graphql/queries';
-import { updateUser } from '../../graphql/mutations';
+import { updateUser, updateGear } from '../../graphql/mutations';
 import Storage from '@aws-amplify/storage';
 
 const SettingsForm = (props) => {
+  const { userData, toggleSettingsModal, fetchUser } = props;
   const userID = useSelector((state) => state.user.id);
-  const [userData, setUserData] = useState({});
-  const [updatedUserData, setUpdatedUserData] = useState({});
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [weight, setWeight] = useState(0);
-  const [profilePic, setProfilePic] = useState({});
+  const [firstName, setFirstName] = useState(userData.firstName);
+  const [lastName, setLastName] = useState(userData.lastName);
+  const [weight, setWeight] = useState(userData.weight);
+  const [profilePic, setProfilePic] = useState(null);
+  const [gear, setGear] = useState(userData?.gear?.items);
+  const [equippedGearName, setEquippedGearName] = useState('');
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        await API.graphql(
-          graphqlOperation(updateUser, {
-            input: {
-              id: '6c57fb6a-3ec6-4c67-a205-8323952c8293',
-              weight: weight,
-              firstName: firstName,
-              lastName: lastName,
-            },
-          })
-        );
-        const userDataFromCall = await API.graphql(graphqlOperation(getUser, { id: userID }));
-        console.log(userDataFromCall);
-        setUserData(userDataFromCall.data.getUser);
-        setUpdatedUserData(userDataFromCall.data.getUser);
-      } catch (error) {
-        console.log(error);
+    // eslint-disable-next-line no-unused-expressions
+    gear?.forEach((gear) => {
+      if (gear.isEquipped) {
+        setEquippedGearName(`${gear.brand} ${gear.model}`);
       }
-    };
-    fetchUser();
-  }, []);
+    });
+  }, [gear]);
 
-  const handleFirstNameOnChange = (event) => {
-    const { value } = event.target;
-    setFirstName(value);
-    console.log(value);
+  const updateUserSettings = async (userSettings) => {
+    await API.graphql(
+      graphqlOperation(updateUser, {
+        input: userSettings,
+      })
+    );
   };
 
-  const handleLastNameOnChange = (event) => {
-    const { value } = event.target;
-    setLastName(value);
-    console.log(value);
+  const updateGearData = async (gear) => {
+    await API.graphql(
+      graphqlOperation(updateGear, {
+        input: gear,
+      })
+    );
   };
 
-  const handleWeightOnChange = (event) => {
-    const { value } = event.target;
-    setWeight(value);
-    console.log(value);
-  };
+  const handleUserSettingsEditSubmit = async (event) => {
+    event.preventDefault();
 
-  const profilePicutureHandlerOnChange = (event) => {
-    const value = event.target.files[0];
-    setProfilePic(value);
-    console.log(profilePic);
-  };
-
-  const checkUpdates = () => {
     try {
-      if (firstName != '') {
-        const updateFirstName = async () => {
-          await API.graphql(
-            graphqlOperation(updateUser, {
-              input: { id: '6c57fb6a-3ec6-4c67-a205-8323952c8293', firstName: firstName },
-            })
-          );
-        };
-        updateFirstName();
-      }
-      if (lastName != '') {
-        const updateLastName = async () => {
-          await API.graphql(
-            graphqlOperation(updateUser, { input: { id: '6c57fb6a-3ec6-4c67-a205-8323952c8293', lastName: lastName } })
-          );
-        };
-        updateLastName();
-      }
-      if (weight != 0) {
-        const updateWeight = async () => {
-          await API.graphql(
-            graphqlOperation(updateUser, { input: { id: '6c57fb6a-3ec6-4c67-a205-8323952c8293', weight: weight } })
-          );
-        };
-        updateWeight();
-      }
-      console.log(firstName, lastName, weight);
-      const blob = new Blob([profilePic], { type: 'image/jpg' });
       const profilePictureName = `profilePictures/${userID}/pic_${Date.now()}`;
-      Storage.put(profilePictureName, blob);
+      console.log(profilePictureName);
+      const updatedUserSettings = {
+        id: userID,
+        firstName,
+        lastName,
+        weight,
+      };
+      if (gear) {
+        gear.forEach((gear) => {
+          const updatedGearData = {
+            isEquipped: gear.isEquipped,
+            userID: gear.userID,
+            id: gear.id,
+          };
+
+          updateGearData(updatedGearData);
+        });
+      }
+
+      if (profilePic) {
+        Storage.put(profilePictureName, profilePic).then((result) => {
+          console.log(result.key);
+          updatedUserSettings['profilePictureS3FileKey'] = result.key;
+          updateUserSettings(updatedUserSettings).then(() => {
+            fetchUser();
+            toggleSettingsModal();
+          });
+        });
+      } else {
+        updateUserSettings(updatedUserSettings).then(() => {
+          fetchUser();
+          toggleSettingsModal();
+        });
+      }
     } catch (error) {
       console.log(error);
     }
   };
 
+  const handleFirstNameOnChange = (event) => {
+    const { value } = event.target;
+    setFirstName(value);
+  };
+
+  const handleGearOnChange = (event) => {
+    const { value } = event.target;
+    setEquippedGearName(value);
+
+    // eslint-disable-next-line no-unused-expressions
+    gear?.forEach((gear) => {
+      if (`${gear.brand} ${gear.model}` === value) {
+        gear.isEquipped = true;
+      } else {
+        gear.isEquipped = false;
+      }
+    });
+  };
+
+  const handleLastNameOnChange = (event) => {
+    const { value } = event.target;
+    setLastName(value);
+  };
+
+  const handleWeightOnChange = (event) => {
+    const { value } = event.target;
+    const weight = parseFloat(value);
+    console.log(weight);
+    setWeight(weight);
+  };
+
+  const handleProfilePicutureUpload = (event) => {
+    const value = event.target.files[0];
+    console.log(value);
+    setProfilePic(value);
+  };
+
   return (
-    <Form>
+    <Form onSubmit={handleUserSettingsEditSubmit}>
       <FormGroup>
-        <Label for="exampleFile">File</Label>
-        <Input type="file" name="file" id="exampleFile" onChange={profilePicutureHandlerOnChange} />
-        <FormText color="muted">
-          This is some placeholder block-level help text for the above input. It's a bit lighter and easily wraps to a
-          new line.
-        </FormText>
+        <Label for="profilePicture">Profile Picture</Label>
+        <Input type="file" name="Profile Picture" id="profilePicture" onChange={handleProfilePicutureUpload} />
       </FormGroup>
       <FormGroup>
         <Label for="firstName">First Name</Label>
-        <Input
-          type="text"
-          name="FirstName"
-          id="firstName"
-          placeholder={userData.firstName}
-          onChange={handleFirstNameOnChange}
-        />
+        <Input value={firstName} type="text" name="First Name" id="firstName" onChange={handleFirstNameOnChange} />
       </FormGroup>
       <FormGroup>
         <Label for="lastName">Last Name</Label>
-        <Input
-          type="text"
-          name="lastName"
-          id="lastname"
-          placeholder={userData.lastName}
-          onChange={handleLastNameOnChange}
-        />
-      </FormGroup>
-      <FormGroup tag="fieldset">
-        <legend>Gender</legend>
-        <FormGroup check>
-          <Label check>
-            <Input type="radio" name="radio1" /> Male
-          </Label>
-        </FormGroup>
-        <FormGroup check>
-          <Label check>
-            <Input type="radio" name="radio1" /> Female
-          </Label>
-        </FormGroup>
+        <Input value={lastName} type="text" name="Last Name" id="lastname" onChange={handleLastNameOnChange} />
       </FormGroup>
       <FormGroup>
         <Label for="weight">Weight</Label>
-        <Input type="number" name="number" id="weight" placeholder={userData.weight} onChange={handleWeightOnChange} />
-      </FormGroup>
-      <FormGroup>
-        <Label for="exampleDate">Birth Date</Label>
-        <Input type="date" name="birthDate" id="birthDate" placeholder="06/04/1989" />
+        <Input value={weight} type="number" name="Weight" id="weight" onChange={handleWeightOnChange} />
       </FormGroup>
       <FormGroup>
         <Label for="exampleSelect">Equip Gear</Label>
-        <Input type="select" name="gear" id="gear">
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
-          <option>4</option>
-          <option>5</option>
+        <Input type="select" name="gear" id="gear" value={equippedGearName} onChange={handleGearOnChange}>
+          {gear?.map((gear, index) => {
+            return (
+              <option key={index}>
+                {gear.brand} {gear.model}
+              </option>
+            );
+          })}
         </Input>
       </FormGroup>
-      <Button color="primary" onClick={checkUpdates}>
-        Do Something
-      </Button>{' '}
+      <Button color="primary">Submit</Button>
+      <Button color="secondary" onClick={toggleSettingsModal}>
+        Cancel
+      </Button>
     </Form>
   );
 };

@@ -17,10 +17,8 @@ const MapContainer = ({ rawMeasurements = [] }) => {
   };
 
   useEffect(() => {
-    console.log(rawMeasurements);
     const rawMeasurementCoordinates = setupMapGeoJSONData(rawMeasurements);
     const centerCoordinates = setMapCenterCoordinates(rawMeasurementCoordinates);
-    console.log(centerCoordinates);
     setCoordinates(rawMeasurementCoordinates);
     setCenterCoordinates(centerCoordinates);
   }, [rawMeasurements]);
