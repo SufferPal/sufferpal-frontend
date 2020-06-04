@@ -29,8 +29,24 @@ export const calculatePace = (time, distance) => {
 
   const timeInMinutes = time / 60;
   const pace = timeInMinutes / distance;
-  return parseFloat(pace.toFixed(2));
+  const paceTwoDecimals = pace.toFixed(2);
+  const paceString = paceTwoDecimals.toString();
+  const paceSplitMin = paceString.split('.')[0];
+  const paceSeconds = '.' + paceString.split('.')[1];
+  const paceInSeconds = paceSeconds * 60;
+  const seconds = paceInSeconds.toFixed(2).toString();
+  const secondsRounded = seconds.split('.')[0];
+  //const finalPace = (paceSplitMin + ':' + secondsRounded).toString();
+  if (seconds < 10) {
+    return (paceSplitMin + ':0' + secondsRounded).toString();
+  }
+
+  //const secondsRounded = seconds.split('.')[0];
+  const finalPace = (paceSplitMin + ':' + secondsRounded).toString();
+
+  return finalPace;
 };
+
 // this function creates custom time on activity card
 export const createCustomTimeString = (time) => {
   if (!time) {
