@@ -87,12 +87,11 @@ describe('test setupMapGeoJSONData', () => {
 });
 
 describe('test calculatePace', () => {
-  it('should return a float representing pace', () => {
+  it('should return a string representing pace', () => {
     expect(calculatePace(null, 1000)).toEqual(null);
     expect(calculatePace(null, null)).toEqual(null);
-    expect(calculatePace(500, 10)).toEqual(0.83);
-    expect(calculatePace(120, 10)).toEqual(0.2);
-    expect(calculatePace(2378.89, 23.9398)).toEqual(1.66);
+    expect(calculatePace(3600, 6)).toEqual('10:00');
+    expect(calculatePace(1800, 6)).toEqual('5:00');
   });
 });
 
