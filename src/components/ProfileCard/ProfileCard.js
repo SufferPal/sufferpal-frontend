@@ -95,14 +95,12 @@ const ProfileCard = ({ userData, fetchUser }) => {
             firstName={firstName}
             lastName={lastName}
             weight={weight}
-            getProfilePictureFromS3={getProfilePictureFromS3}
             fetchUser={fetchUser}
           />
           <AddGearModal
             isModalOpen={isAddGearModalOpen}
             toggleAddGearModal={toggleAddGearModal}
-            userData={userData}
-            getProfilePictureFromS3={getProfilePictureFromS3}
+            fetchUser={fetchUser}
           />
         </CardBody>
       </Card>

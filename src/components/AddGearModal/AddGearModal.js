@@ -1,27 +1,25 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import AddGearForm from '../AddGearForm/AddGearForm';
-import { API, graphqlOperation } from 'aws-amplify';
-import { createGear } from '../../graphql/mutations';
-import { useSelector } from 'react-redux';
 
-const AddGearModal = (props) => {
-  const { userData, fetchUser, isModalOpen, toggleAddGearModal } = props;
-  const userID = useSelector((state) => state.user.id);
-  const addGear = async (gear) => {
-    await API.graphql(graphqlOperation(createGear, { input: gear }));
-  };
-
+const AddGearModal = ({ isModalOpen, toggleAddGearModal, fetchUser }) => {
   return (
     <div className="AddGearModal">
       <Modal isOpen={isModalOpen} toggle={toggleAddGearModal}>
-        <ModalHeader toggle={toggleAddGearModal}>Edit User</ModalHeader>
+        <ModalHeader toggle={toggleAddGearModal}>Add Gear</ModalHeader>
         <ModalBody>
-          <AddGearForm toggleAddGearModal={toggleAddGearModal} userData={userData} fetchUser={fetchUser} />
+          <AddGearForm toggleAddGearModal={toggleAddGearModal} fetchUser={fetchUser} />
         </ModalBody>
       </Modal>
     </div>
   );
+};
+
+AddGearModal.propTypes = {
+  isModalOpen: PropTypes.bool.isRequired,
+  toggleAddGearModal: PropTypes.func.isRequired,
+  fetchUser: PropTypes.func.isRequired,
 };
 
 export default AddGearModal;

@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { useSelector } from 'react-redux';
 import { API, graphqlOperation } from 'aws-amplify';
 import { createGear } from '../../graphql/mutations';
 
-const AddGearForm = (props) => {
-  const { toggleAddGearModal } = props;
+const AddGearForm = ({ fetchUser, toggleAddGearModal }) => {
   const [brand, setBrand] = useState('');
   const [model, setModel] = useState('');
   const [purchaseDate, setPurchaseDate] = useState('');
@@ -15,20 +15,24 @@ const AddGearForm = (props) => {
     const { value } = event.target;
     setBrand(value);
   };
+
   const handleModelOnChange = (event) => {
     const { value } = event.target;
     setModel(value);
   };
+
   const handlePurchaseDateOnChange = (event) => {
     const { value } = event.target;
-    console.log(value);
     setPurchaseDate(value);
   };
+
   const addGear = async (gear) => {
     await API.graphql(graphqlOperation(createGear, { input: gear }));
   };
+
   const handleAddGearSubmit = (event) => {
     event.preventDefault();
+
     const gearData = {
       brand,
       model,
@@ -37,8 +41,10 @@ const AddGearForm = (props) => {
       userID: userID,
       distance: 0,
     };
+
     addGear(gearData).then(() => {
       toggleAddGearModal();
+      fetchUser();
     });
   };
 
@@ -53,7 +59,7 @@ const AddGearForm = (props) => {
         <Input type="text" name="Model" id="model" onChange={handleModelOnChange} />
       </FormGroup>
       <FormGroup>
-        <Label for="purchaseDate">Date</Label>
+        <Label for="purchaseDate">Purchased Date</Label>
         <Input
           type="date"
           name="Purchase Date"
@@ -68,6 +74,11 @@ const AddGearForm = (props) => {
       </Button>
     </Form>
   );
+};
+
+AddGearForm.propTypes = {
+  fetchUser: PropTypes.func.isRequired,
+  toggleAddGearModal: PropTypes.func.isRequired,
 };
 
 export default AddGearForm;
