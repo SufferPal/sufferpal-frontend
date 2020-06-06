@@ -1,12 +1,32 @@
-import React from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import DefaultTemplate from '../../templates/DefaultTemplate/DefaultTemplate';
 import { Row, Col } from 'reactstrap';
+import { useSelector } from 'react-redux';
 import ActivityCardContainer from '../../components/ActivityCardContainer/ActivityCardContainer';
 import CreateActivityForm from '../../components/CreateActivityForm/CreateActivityForm';
 import ProfileCard from '../../components/ProfileCard/ProfileCard';
+import { API, graphqlOperation } from 'aws-amplify';
+import { getUser } from '../../graphql/queries';
 import './ProfilePage.scss';
 
 const ProfilePage = () => {
+  const [userData, setUserData] = useState();
+  const userID = useSelector((state) => state.user.id);
+
+  const fetchUser = useCallback(async () => {
+    try {
+      const userData = await API.graphql(graphqlOperation(getUser, { id: userID }));
+
+      setUserData(userData.data.getUser);
+    } catch (error) {
+      console.log('Error');
+    }
+  }, [userID]);
+
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser]);
+
   return (
     <DefaultTemplate>
       <div className="ProfilePage pt-4">
@@ -19,9 +39,14 @@ const ProfilePage = () => {
               <h3 className="your-activities m-0">YOUR ACTIVITIES</h3>
             </div>
             {/* Upload Component */}
-            <CreateActivityForm />
+            <CreateActivityForm fetchUser={fetchUser} />
             {/* List of Card */}
-            <ActivityCardContainer />
+            <ActivityCardContainer
+              firstName={userData?.firstName}
+              lastName={userData?.lastName}
+              profilePictureS3FileKey={userData?.profilePictureS3FileKey}
+              activities={userData?.activities?.items}
+            />
           </Col>
         </Row>
       </div>
