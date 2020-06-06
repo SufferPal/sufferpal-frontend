@@ -1,28 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { useSelector } from 'react-redux';
 import { API, graphqlOperation } from 'aws-amplify';
-import { updateUser, updateGear } from '../../graphql/mutations';
+import { updateUser } from '../../graphql/mutations';
 import Storage from '@aws-amplify/storage';
 
-const SettingsForm = (props) => {
-  const { userData, toggleSettingsModal, fetchUser } = props;
+const SettingsForm = ({ firstName, lastName, weight, fetchUser, toggleSettingsModal }) => {
   const userID = useSelector((state) => state.user.id);
-  const [firstName, setFirstName] = useState(userData.firstName);
-  const [lastName, setLastName] = useState(userData.lastName);
-  const [weight, setWeight] = useState(userData.weight);
+  const [userFirstName, setUserFirstName] = useState(firstName);
+  const [userLastName, setUserLastName] = useState(lastName);
+  const [userWeight, setUserWeight] = useState(weight);
   const [profilePic, setProfilePic] = useState(null);
-  const [gear, setGear] = useState(userData?.gear?.items);
-  const [equippedGearName, setEquippedGearName] = useState('');
-
-  useEffect(() => {
-    // eslint-disable-next-line no-unused-expressions
-    gear?.forEach((gear) => {
-      if (gear.isEquipped) {
-        setEquippedGearName(`${gear.brand} ${gear.model}`);
-      }
-    });
-  }, [gear]);
 
   const updateUserSettings = async (userSettings) => {
     await API.graphql(
@@ -32,41 +21,20 @@ const SettingsForm = (props) => {
     );
   };
 
-  const updateGearData = async (gear) => {
-    await API.graphql(
-      graphqlOperation(updateGear, {
-        input: gear,
-      })
-    );
-  };
-
   const handleUserSettingsEditSubmit = async (event) => {
     event.preventDefault();
 
     try {
       const profilePictureName = `profilePictures/${userID}/pic_${Date.now()}`;
-      console.log(profilePictureName);
       const updatedUserSettings = {
         id: userID,
-        firstName,
-        lastName,
-        weight,
+        firstName: userFirstName,
+        lastName: userLastName,
+        weight: userWeight,
       };
-      if (gear) {
-        gear.forEach((gear) => {
-          const updatedGearData = {
-            isEquipped: gear.isEquipped,
-            userID: gear.userID,
-            id: gear.id,
-          };
-
-          updateGearData(updatedGearData);
-        });
-      }
 
       if (profilePic) {
         Storage.put(profilePictureName, profilePic).then((result) => {
-          console.log(result.key);
           updatedUserSettings['profilePictureS3FileKey'] = result.key;
           updateUserSettings(updatedUserSettings).then(() => {
             fetchUser();
@@ -86,38 +54,22 @@ const SettingsForm = (props) => {
 
   const handleFirstNameOnChange = (event) => {
     const { value } = event.target;
-    setFirstName(value);
-  };
-
-  const handleGearOnChange = (event) => {
-    const { value } = event.target;
-    setEquippedGearName(value);
-
-    // eslint-disable-next-line no-unused-expressions
-    gear?.forEach((gear) => {
-      if (`${gear.brand} ${gear.model}` === value) {
-        gear.isEquipped = true;
-      } else {
-        gear.isEquipped = false;
-      }
-    });
+    setUserFirstName(value);
   };
 
   const handleLastNameOnChange = (event) => {
     const { value } = event.target;
-    setLastName(value);
+    setUserLastName(value);
   };
 
   const handleWeightOnChange = (event) => {
     const { value } = event.target;
     const weight = parseFloat(value);
-    console.log(weight);
-    setWeight(weight);
+    setUserWeight(weight);
   };
 
-  const handleProfilePicutureUpload = (event) => {
+  const handleProfilePictureUpload = (event) => {
     const value = event.target.files[0];
-    console.log(value);
     setProfilePic(value);
   };
 
@@ -125,31 +77,19 @@ const SettingsForm = (props) => {
     <Form onSubmit={handleUserSettingsEditSubmit}>
       <FormGroup>
         <Label for="profilePicture">Profile Picture</Label>
-        <Input type="file" name="Profile Picture" id="profilePicture" onChange={handleProfilePicutureUpload} />
+        <Input type="file" name="Profile Picture" id="profilePicture" onChange={handleProfilePictureUpload} />
       </FormGroup>
       <FormGroup>
         <Label for="firstName">First Name</Label>
-        <Input value={firstName} type="text" name="First Name" id="firstName" onChange={handleFirstNameOnChange} />
+        <Input value={userFirstName} type="text" name="First Name" id="firstName" onChange={handleFirstNameOnChange} />
       </FormGroup>
       <FormGroup>
         <Label for="lastName">Last Name</Label>
-        <Input value={lastName} type="text" name="Last Name" id="lastname" onChange={handleLastNameOnChange} />
+        <Input value={userLastName} type="text" name="Last Name" id="lastname" onChange={handleLastNameOnChange} />
       </FormGroup>
       <FormGroup>
         <Label for="weight">Weight</Label>
-        <Input value={weight} type="number" name="Weight" id="weight" onChange={handleWeightOnChange} />
-      </FormGroup>
-      <FormGroup>
-        <Label for="exampleSelect">Equip Gear</Label>
-        <Input type="select" name="gear" id="gear" value={equippedGearName} onChange={handleGearOnChange}>
-          {gear?.map((gear, index) => {
-            return (
-              <option key={index}>
-                {gear.brand} {gear.model}
-              </option>
-            );
-          })}
-        </Input>
+        <Input value={userWeight} type="number" name="Weight" id="weight" onChange={handleWeightOnChange} />
       </FormGroup>
       <Button color="primary">Submit</Button>
       <Button color="secondary" onClick={toggleSettingsModal}>
@@ -157,6 +97,20 @@ const SettingsForm = (props) => {
       </Button>
     </Form>
   );
+};
+
+SettingsForm.propTypes = {
+  fetchUser: PropTypes.func.isRequired,
+  firstName: PropTypes.string,
+  lastName: PropTypes.string,
+  weight: PropTypes.number,
+  toggleSettingsModal: PropTypes.func.isRequired,
+};
+
+SettingsForm.defaultProps = {
+  firstName: '',
+  lastName: '',
+  weight: 0,
 };
 
 export default SettingsForm;

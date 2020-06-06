@@ -14,6 +14,6 @@ test('renders Header', () => {
       </Router>
     </Provider>
   );
-  const createActivityFormText = getByText(/calendar/i);
-  expect(createActivityFormText).toBeInTheDocument();
+  const headerText = getByText(/calendar/i);
+  expect(headerText).toBeInTheDocument();
 });

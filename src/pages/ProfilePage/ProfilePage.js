@@ -32,7 +32,7 @@ const ProfilePage = () => {
       <div className="ProfilePage pt-4">
         <Row>
           <Col md="4">
-            <ProfileCard userData={userData} />
+            <ProfileCard userData={userData} fetchUser={fetchUser} />
           </Col>
           <Col md="8" className="p-0">
             <div className="your-activities-cont d-flex align-items-center justify-content-start px-3 py-2 mb-3">

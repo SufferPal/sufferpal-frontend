@@ -6,7 +6,7 @@ import AddGearModal from '../AddGearModal/AddGearModal';
 import './ProfileCard.scss';
 import Storage from '@aws-amplify/storage';
 
-const ProfileCard = ({ userData }) => {
+const ProfileCard = ({ userData, fetchUser }) => {
   const { profilePictureS3FileKey, gear, firstName, lastName, gender, weight, age } = userData;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [profilePictureURL, setProfilePictureURL] = useState(null);
@@ -92,8 +92,11 @@ const ProfileCard = ({ userData }) => {
           <SettingsModal
             isModalOpen={isModalOpen}
             toggleSettingsModal={toggleSettingsModal}
-            userData={userData}
+            firstName={firstName}
+            lastName={lastName}
+            weight={weight}
             getProfilePictureFromS3={getProfilePictureFromS3}
+            fetchUser={fetchUser}
           />
           <AddGearModal
             isModalOpen={isAddGearModalOpen}
@@ -119,6 +122,7 @@ ProfileCard.propTypes = {
     weight: PropTypes.number,
     age: PropTypes.number,
   }),
+  fetchUser: PropTypes.func.isRequired,
 };
 
 ProfileCard.defaultProps = {
