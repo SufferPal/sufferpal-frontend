@@ -1,16 +1,13 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardImg, Table, CardBody, CardTitle, Button } from 'reactstrap';
 import SettingsModal from '../SettingsModal/SettingsModal';
 import AddGearModal from '../AddGearModal/AddGearModal';
 import './ProfileCard.scss';
-import { useSelector } from 'react-redux';
-import { API, graphqlOperation } from 'aws-amplify';
 import Storage from '@aws-amplify/storage';
-import { getUser } from '../../graphql/queries';
 
-const ProfileCard = () => {
-  const userID = useSelector((state) => state.user.id);
-  const [userData, setUserData] = useState({});
+const ProfileCard = ({ userData }) => {
+  const { profilePictureS3FileKey, gear, firstName, lastName, gender, weight, age } = userData;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [profilePictureURL, setProfilePictureURL] = useState(null);
   const [equippedGear, setEquippedGear] = useState('');
@@ -21,38 +18,35 @@ const ProfileCard = () => {
   const toggleAddGearModal = () => setIsAddGearModalOpen(!isAddGearModalOpen);
 
   const determineEquippedGear = useCallback(() => {
-    const gear = userData?.gear?.items;
+    const gearList = gear?.items;
 
-    if (gear) {
+    if (gearList) {
       // eslint-disable-next-line no-unused-expressions
-      const equippedGear = gear.filter((gear) => {
-        return gear.isEquipped;
+      const equippedGear = gearList.filter((gearItem) => {
+        return gearItem.isEquipped;
       });
 
       return `${equippedGear[0].brand} ${equippedGear[0].model}`;
     }
-  }, [userData]);
+  }, [gear]);
 
-  const fetchUser = useCallback(async () => {
+  const getProfilePictureFromS3 = useCallback(async () => {
     try {
-      const userDataFromCall = await API.graphql(graphqlOperation(getUser, { id: userID }));
-      const userData = userDataFromCall.data.getUser;
-      const { profilePictureS3FileKey } = userData;
-      Storage.get(profilePictureS3FileKey).then((result) => {
-        setProfilePictureURL(result);
-        setUserData(userData);
-      });
+      if (profilePictureS3FileKey) {
+        Storage.get(profilePictureS3FileKey).then((result) => {
+          setProfilePictureURL(result);
+        });
+      }
     } catch (error) {
       console.log(error);
     }
-  }, [userID]);
+  }, [profilePictureS3FileKey]);
 
   useEffect(() => {
-    fetchUser();
-  }, [fetchUser]);
+    getProfilePictureFromS3();
+  }, [getProfilePictureFromS3]);
 
   useEffect(() => {
-    console.log(determineEquippedGear());
     setEquippedGear(determineEquippedGear());
   }, [userData, determineEquippedGear]);
 
@@ -62,7 +56,7 @@ const ProfileCard = () => {
         <CardImg top className="profile-picture" src={profilePictureURL} alt="Card image cap" />
         <CardBody>
           <CardTitle className="font-styles">
-            {userData.firstName} {userData.lastName}
+            {firstName} {lastName}
           </CardTitle>
           <div className="setting-labels">
             User Settings
@@ -70,15 +64,15 @@ const ProfileCard = () => {
               <tbody>
                 <tr>
                   <th scope="row">Gender:</th>
-                  <td>{userData.gender}</td>
+                  <td>{gender}</td>
                 </tr>
                 <tr>
                   <th scope="row">Weight:</th>
-                  <td>{userData.weight}</td>
+                  <td>{weight}</td>
                 </tr>
                 <tr>
                   <th scope="row">Birthday:</th>
-                  <td>{userData.age}</td>
+                  <td>{age}</td>
                 </tr>
                 <tr>
                   <th scope="row" className="setting-labels">
@@ -99,18 +93,36 @@ const ProfileCard = () => {
             isModalOpen={isModalOpen}
             toggleSettingsModal={toggleSettingsModal}
             userData={userData}
-            fetchUser={fetchUser}
+            getProfilePictureFromS3={getProfilePictureFromS3}
           />
           <AddGearModal
             isModalOpen={isAddGearModalOpen}
             toggleAddGearModal={toggleAddGearModal}
             userData={userData}
-            fetchUser={fetchUser}
+            getProfilePictureFromS3={getProfilePictureFromS3}
           />
         </CardBody>
       </Card>
     </div>
   );
+};
+
+ProfileCard.propTypes = {
+  userData: PropTypes.shape({
+    profilePictureS3FileKey: PropTypes.string,
+    gear: PropTypes.shape({
+      items: PropTypes.array,
+    }),
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    gender: PropTypes.string,
+    weight: PropTypes.number,
+    age: PropTypes.number,
+  }),
+};
+
+ProfileCard.defaultProps = {
+  userData: {},
 };
 
 export default ProfileCard;
