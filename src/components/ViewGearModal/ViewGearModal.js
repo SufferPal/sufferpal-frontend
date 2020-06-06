@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, Table, Input } from 'reactstrap';
 import { useSelector } from 'react-redux';
 import { API, graphqlOperation } from 'aws-amplify';
-import { createGear } from '../../graphql/mutations';
+import { deleteGear } from '../../graphql/mutations';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import './ViewGearModal.scss';
 
 const ViewGearModal = ({ fetchUser, toggleViewGearModal, isModalOpen, gear }) => {
   const userID = useSelector((state) => state.user.id);
@@ -46,6 +47,16 @@ const ViewGearModal = ({ fetchUser, toggleViewGearModal, isModalOpen, gear }) =>
   //       fetchUser();
   //     });
   //   };
+  const handleGearDelete = (gearId) => {
+    console.log('clicked', gearId);
+    deleteGearItem({ id: gearId }).then(() => {
+      fetchUser();
+    });
+  };
+
+  const deleteGearItem = async (gear) => {
+    await API.graphql(graphqlOperation(deleteGear, { input: gear }));
+  };
 
   return (
     <div className="ViewGearModal">
@@ -65,9 +76,9 @@ const ViewGearModal = ({ fetchUser, toggleViewGearModal, isModalOpen, gear }) =>
               </tr>
             </thead>
             <tbody>
-              {gear?.items?.map((gearItem) => {
+              {gear?.items?.map((gearItem, index) => {
                 return (
-                  <tr>
+                  <tr key={index}>
                     <td>{gearItem.brand}</td>
                     <td>{gearItem.model}</td>
                     <td>{gearItem.distance.toFixed(2)}</td>
@@ -76,7 +87,14 @@ const ViewGearModal = ({ fetchUser, toggleViewGearModal, isModalOpen, gear }) =>
                       <Input type="checkbox" />
                     </td>
                     <td>
-                      <FontAwesomeIcon icon={faTrash} />
+                      <FontAwesomeIcon
+                        className="delete-button"
+                        onClick={() => {
+                          handleGearDelete(gearItem.id);
+                        }}
+                        data-gear-id={gearItem.id}
+                        icon={faTrash}
+                      />
                     </td>
                   </tr>
                 );
