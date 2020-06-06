@@ -99,3 +99,46 @@ export const setMapCenterCoordinates = (coordinates) => {
   }
   return [sumLong / length, sumLat / length];
 };
+
+export const mileSplits = (rawMeasurement) => {
+  let mileNumber = 0;
+  let mileIt = 0;
+  let recordNumber = 0;
+  let totalSpeed = 0;
+  let totalHeartRate = 0;
+  let totalCadence = 0;
+  const splits = [];
+
+  console.log(rawMeasurement);
+  for (let i = 1; i < rawMeasurement.length; i += 1) {
+    recordNumber = recordNumber + 1;
+    if (rawMeasurement[i].speed !== null && rawMeasurement[i].speed !== undefined) {
+      totalSpeed = totalSpeed + rawMeasurement[i].speed;
+    }
+    if (rawMeasurement[i].heart_rate !== null && rawMeasurement[i].heart_rate !== undefined) {
+      totalHeartRate = totalHeartRate + rawMeasurement[i].heart_rate;
+    }
+    if (rawMeasurement[i].cadence !== null && rawMeasurement[i].cadence !== undefined) {
+      totalCadence = totalCadence + rawMeasurement[i].cadence;
+    }
+
+    //console.log(rawMeasurement[i].distance.toFixed(2));
+    if (rawMeasurement[i].distance >= mileIt + 1) {
+      mileIt = mileIt + 1;
+      mileNumber = mileNumber + 1;
+      splits.push({
+        id: i,
+        mile: mileNumber,
+        avgSpeed: totalSpeed / recordNumber,
+        avgHR: totalHeartRate / recordNumber,
+        avgCadence: (totalCadence / recordNumber) * 2,
+      });
+      recordNumber = 0;
+      totalSpeed = 0;
+      totalHeartRate = 0;
+      totalCadence = 0;
+    }
+  }
+  console.log('splits', splits);
+  return [];
+};
