@@ -1,17 +1,15 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import CreateActivityForm from './CreateActivityForm';
+import ProfileCard from './ProfileCard';
 import { Provider } from 'react-redux';
 import { store } from '../../store/store';
 
-test('renders CreateActivityForm', () => {
-  const fetchUser = jest.fn();
-
+test('renders ProfileCard', () => {
   const { getByText } = render(
     <Provider store={store}>
-      <CreateActivityForm fetchUser={fetchUser} />
+      <ProfileCard />
     </Provider>
   );
-  const createActivityFormText = getByText(/fit file dropbox/i);
+  const createActivityFormText = getByText(/user settings/i);
   expect(createActivityFormText).toBeInTheDocument();
 });

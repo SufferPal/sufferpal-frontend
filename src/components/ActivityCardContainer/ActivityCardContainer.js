@@ -11,7 +11,7 @@ const ActivityCardContainer = ({ firstName, lastName, profilePictureS3FileKey, a
           activity={activity}
           firstName={firstName}
           lastName={lastName}
-          profilePicture={profilePictureS3FileKey}
+          profilePictureS3FileKey={profilePictureS3FileKey}
         />
       ))}
     </>

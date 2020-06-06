@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import './ActivityCard.scss';
 import { Row, Col } from 'reactstrap';
 import { calculatePace, createCustomTimeString } from '../../shared/functions/helpers';
@@ -6,22 +7,20 @@ import MapContainer from '../Map/MapContainer';
 import Storage from '@aws-amplify/storage';
 import { useHistory } from 'react-router-dom';
 
-const ActivityCard = (props) => {
-  const { firstName, lastName, profilePicture, activity } = props;
+const ActivityCard = ({ firstName, lastName, profilePictureS3FileKey, activity }) => {
   const { avgHeartRate, totalMovingTime, totalDistance, description, rawMeasurementsS3FileKey } = activity;
   const [rawMeasurements, setRawMeasurements] = useState([]);
   const history = useHistory();
   const [profilePictureURL, setProfilePictureURL] = useState('');
 
   useEffect(() => {
-    console.log(profilePicture);
     Storage.get(rawMeasurementsS3FileKey, { download: true }).then((result) => {
       setRawMeasurements(result.Body);
     });
-    Storage.get(profilePicture).then((result) => {
+    Storage.get(profilePictureS3FileKey).then((result) => {
       setProfilePictureURL(result);
     });
-  }, []);
+  }, [profilePictureS3FileKey, rawMeasurementsS3FileKey]);
 
   const handleActivityCardClick = () => {
     history.push({
@@ -40,14 +39,14 @@ const ActivityCard = (props) => {
           <h3 className="user-name mb-2">
             {firstName} {lastName}
           </h3>
-          {activity?.description && <p className="activity-description text-center">{activity?.description}</p>}
+          {description && <p className="activity-description text-center">{description}</p>}
         </Col>
         <Col sm="9">
           <Row>
             <Col sm="12" className="data-column d-flex justify-content-center align-items-center px-3">
               <div className="data-header-container d-flex justify-content-center align-items-center flex-column p-1 mr-1">
                 <h3 className="data-header">
-                  {totalDistance.toFixed(2)}
+                  {totalDistance?.toFixed(2)}
                   <span className="units">mi</span>
                 </h3>
                 <h4 className="data-label">Distance</h4>
@@ -87,6 +86,27 @@ const ActivityCard = (props) => {
       </Row>
     </div>
   );
+};
+
+ActivityCard.propTypes = {
+  firstName: PropTypes.string,
+  lastName: PropTypes.string,
+  profilePictureS3FileKey: PropTypes.string,
+  activity: PropTypes.shape({
+    avgHeartRate: PropTypes.number,
+    totalMovingTime: PropTypes.number,
+    totalDistance: PropTypes.number,
+    description: PropTypes.string,
+    rawMeasurementsS3FileKey: PropTypes.string,
+    id: PropTypes.string,
+  }),
+};
+
+ActivityCard.defaultProps = {
+  firstName: '',
+  lastName: '',
+  profilePictureS3FileKey: '',
+  activity: {},
 };
 
 export default ActivityCard;

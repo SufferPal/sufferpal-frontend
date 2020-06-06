@@ -1,17 +1,19 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import CreateActivityForm from './CreateActivityForm';
+import Header from './Header';
 import { Provider } from 'react-redux';
 import { store } from '../../store/store';
+import { Router } from 'react-router-dom';
+import { createMemoryHistory } from 'history';
 
-test('renders CreateActivityForm', () => {
-  const fetchUser = jest.fn();
-
+test('renders Header', () => {
   const { getByText } = render(
     <Provider store={store}>
-      <CreateActivityForm fetchUser={fetchUser} />
+      <Router history={createMemoryHistory({})}>
+        <Header />
+      </Router>
     </Provider>
   );
-  const createActivityFormText = getByText(/fit file dropbox/i);
+  const createActivityFormText = getByText(/calendar/i);
   expect(createActivityFormText).toBeInTheDocument();
 });
