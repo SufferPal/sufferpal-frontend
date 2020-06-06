@@ -3,32 +3,22 @@ import PropTypes from 'prop-types';
 import { Card, CardImg, Table, CardBody, CardTitle, Button } from 'reactstrap';
 import SettingsModal from '../SettingsModal/SettingsModal';
 import AddGearModal from '../AddGearModal/AddGearModal';
+import ViewGearModal from '../ViewGearModal/ViewGearModal';
 import './ProfileCard.scss';
 import Storage from '@aws-amplify/storage';
 
-const ProfileCard = ({ userData, fetchUser }) => {
+const ProfileCard = ({ userData, fetchUser, equippedGear }) => {
   const { profilePictureS3FileKey, gear, firstName, lastName, gender, weight, age } = userData;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [profilePictureURL, setProfilePictureURL] = useState(null);
-  const [equippedGear, setEquippedGear] = useState('');
   const [isAddGearModalOpen, setIsAddGearModalOpen] = useState(false);
+  const [isViewGearModalOpen, setIsViewGearModalOpen] = useState(false);
 
   const toggleSettingsModal = () => setIsModalOpen(!isModalOpen);
 
   const toggleAddGearModal = () => setIsAddGearModalOpen(!isAddGearModalOpen);
 
-  const determineEquippedGear = useCallback(() => {
-    const gearList = gear?.items;
-
-    if (gearList) {
-      // eslint-disable-next-line no-unused-expressions
-      const equippedGear = gearList.filter((gearItem) => {
-        return gearItem.isEquipped;
-      });
-
-      return `${equippedGear[0].brand} ${equippedGear[0].model}`;
-    }
-  }, [gear]);
+  const toggleViewGearModal = () => setIsViewGearModalOpen(!isViewGearModalOpen);
 
   const getProfilePictureFromS3 = useCallback(async () => {
     try {
@@ -45,10 +35,6 @@ const ProfileCard = ({ userData, fetchUser }) => {
   useEffect(() => {
     getProfilePictureFromS3();
   }, [getProfilePictureFromS3]);
-
-  useEffect(() => {
-    setEquippedGear(determineEquippedGear());
-  }, [userData, determineEquippedGear]);
 
   return (
     <div className="ProfileCard">
@@ -89,6 +75,9 @@ const ProfileCard = ({ userData, fetchUser }) => {
           <Button color="success" onClick={toggleAddGearModal}>
             Add Gear
           </Button>
+          <Button color="success" onClick={toggleViewGearModal}>
+            View Gear
+          </Button>
           <SettingsModal
             isModalOpen={isModalOpen}
             toggleSettingsModal={toggleSettingsModal}
@@ -100,6 +89,12 @@ const ProfileCard = ({ userData, fetchUser }) => {
           <AddGearModal
             isModalOpen={isAddGearModalOpen}
             toggleAddGearModal={toggleAddGearModal}
+            fetchUser={fetchUser}
+          />
+          <ViewGearModal
+            isModalOpen={isViewGearModalOpen}
+            toggleViewGearModal={toggleViewGearModal}
+            gear={gear}
             fetchUser={fetchUser}
           />
         </CardBody>
@@ -121,10 +116,12 @@ ProfileCard.propTypes = {
     age: PropTypes.number,
   }),
   fetchUser: PropTypes.func.isRequired,
+  equippedGear: PropTypes.string,
 };
 
 ProfileCard.defaultProps = {
   userData: {},
+  equippedGear: '',
 };
 
 export default ProfileCard;

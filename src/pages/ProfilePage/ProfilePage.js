@@ -11,17 +11,32 @@ import './ProfilePage.scss';
 
 const ProfilePage = () => {
   const [userData, setUserData] = useState();
+  const [equippedGear, setEquippedGear] = useState();
   const userID = useSelector((state) => state.user.id);
+
+  const determineEquippedGear = useCallback((gear) => {
+    if (gear) {
+      // eslint-disable-next-line no-unused-expressions
+      const equippedGear = gear.filter((gearItem) => {
+        return gearItem.isEquipped;
+      });
+
+      return `${equippedGear[0].brand} ${equippedGear[0].model}`;
+    }
+  }, []);
 
   const fetchUser = useCallback(async () => {
     try {
       const userData = await API.graphql(graphqlOperation(getUser, { id: userID }));
 
       setUserData(userData.data.getUser);
+      const gear = userData.data.getUser.gear.items;
+      console.log(gear);
+      setEquippedGear(determineEquippedGear(gear));
     } catch (error) {
       console.log('Error');
     }
-  }, [userID]);
+  }, [userID, determineEquippedGear]);
 
   useEffect(() => {
     fetchUser();
@@ -32,7 +47,7 @@ const ProfilePage = () => {
       <div className="ProfilePage pt-4">
         <Row>
           <Col md="4">
-            <ProfileCard userData={userData} fetchUser={fetchUser} />
+            <ProfileCard userData={userData} fetchUser={fetchUser} equippedGear={equippedGear} />
           </Col>
           <Col md="8" className="p-0">
             <div className="your-activities-cont d-flex align-items-center justify-content-start px-3 py-2 mb-3">
