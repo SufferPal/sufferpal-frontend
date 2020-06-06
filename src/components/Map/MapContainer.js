@@ -7,7 +7,7 @@ const Map = ReactMapboxGl({
   accessToken: 'pk.eyJ1Ijoiam1pa3J1dDA4IiwiYSI6ImNrYTdnN3A4djAzZGUycXBtNHhpN25wN2oifQ.37cxxJ1_4PvsX71YbaTv3Q',
 });
 
-const MapContainer = ({ rawMeasurements = [] }) => {
+const MapContainer = ({ rawMeasurements = [], mapDimensions }) => {
   const [coordinates, setCoordinates] = useState([]);
   const [centerCoordinates, setCenterCoordinates] = useState([-87.81415463425219, 41.89763618633151]);
 
@@ -31,10 +31,7 @@ const MapContainer = ({ rawMeasurements = [] }) => {
           style="mapbox://styles/jmikrut08/ckabcy0010o7v1ip66qfgqnte"
           zoom={[10]}
           center={centerCoordinates}
-          containerStyle={{
-            height: '300px',
-            width: '400px',
-          }}
+          containerStyle={mapDimensions}
         >
           <GeoJSONLayer
             data={{

@@ -74,7 +74,13 @@ const ActivityCard = (props) => {
           </Row>
           <Row>
             <Col sm="12" className="d-flex justify-content-center align-items-center">
-              <MapContainer rawMeasurements={rawMeasurements} />
+              <MapContainer
+                rawMeasurements={rawMeasurements}
+                mapDimensions={{
+                  height: '300px',
+                  width: '400px',
+                }}
+              />
             </Col>
           </Row>
         </Col>
