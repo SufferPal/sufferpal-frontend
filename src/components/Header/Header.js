@@ -22,11 +22,6 @@ const Header = () => {
                 Profile
               </NavLink>
             </NavItem>
-            <NavItem>
-              <NavLink id="font-list" tag={RRNavLink} exact to="/calendar">
-                Calendar
-              </NavLink>
-            </NavItem>
           </Nav>
         </Collapse>
       </Navbar>

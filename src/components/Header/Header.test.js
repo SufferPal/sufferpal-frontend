@@ -14,6 +14,6 @@ test('renders Header', () => {
       </Router>
     </Provider>
   );
-  const headerText = getByText(/calendar/i);
+  const headerText = getByText(/profile/i);
   expect(headerText).toBeInTheDocument();
 });

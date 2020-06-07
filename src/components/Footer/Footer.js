@@ -23,11 +23,6 @@ const Footer = () => {
                   Profile
                 </NavLink>
               </NavItem>
-              <NavItem>
-                <NavLink id="font-list" tag={RRNavLink} exact to="/calendar">
-                  Calendar
-                </NavLink>
-              </NavItem>
             </Nav>
           </Navbar>
           <p className="foot-description">

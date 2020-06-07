@@ -14,6 +14,6 @@ test('renders Footer', () => {
       </Router>
     </Provider>
   );
-  const footerText = getByText(/calendar/i);
+  const footerText = getByText(/profile/i);
   expect(footerText).toBeInTheDocument();
 });
