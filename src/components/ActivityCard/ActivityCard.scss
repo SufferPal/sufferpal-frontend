@@ -6,12 +6,15 @@
     color: #c3c3c3;
     font-size: 16px;
   }
-  .profile-picture-container {
+
+  .profile-picture {
     height: 100px;
     width: 100px;
     border-radius: 50%;
-    background-color: #656569;
+    object-fit: cover;
+    object-position: 100% 0;
   }
+
   .data-column > div > h3 {
     color: #c3c3c3;
     font-size: 22px;

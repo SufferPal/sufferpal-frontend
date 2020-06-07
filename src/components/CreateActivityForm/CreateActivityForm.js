@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react';
+import PropTypes from 'prop-types';
 import { useDropzone } from 'react-dropzone';
 import { API, graphqlOperation } from 'aws-amplify';
 import Storage from '@aws-amplify/storage';
@@ -10,7 +11,7 @@ import { Button, Form, FormGroup, Label, Input, FormText, Alert } from 'reactstr
 import SufferPalLogo from '../../assets/logo-sufferpal.png';
 import './CreateActivityForm.scss';
 
-const CreateActivityForm = () => {
+const CreateActivityForm = ({ fetchUser }) => {
   const [activity, setActivity] = useState({});
   const userID = useSelector((state) => state.user.id);
   const [activityDescription, setActivityDescription] = useState('');
@@ -54,9 +55,11 @@ const CreateActivityForm = () => {
   const addActivity = async (activity) => {
     await API.graphql(graphqlOperation(createActivity, { input: activity }));
   };
+
   const updateGearData = async (gearData) => {
     await API.graphql(graphqlOperation(updateGear, { input: gearData }));
   };
+
   const listGear = async () => {
     return await API.graphql(graphqlOperation(listGears, { filter: { userID: { eq: userID } } }));
   };
@@ -64,27 +67,27 @@ const CreateActivityForm = () => {
   const handleCreateActivityFormSubmit = (event) => {
     event.preventDefault();
     event.target.reset();
-    // get list of gear
-    // find equipped gear id
-    // call update gear with distance from data
+
     listGear().then((result) => {
-      console.log(result);
       const gearArray = result.data.listGears.items;
+
       let equippedGearID = '';
       let equippedGearDistance = 0;
+
       for (let i = 0; i < gearArray.length; i += 1) {
         if (gearArray[i].isEquipped) {
           equippedGearID = gearArray[i].id;
           equippedGearDistance = gearArray[i].distance;
         }
       }
-      console.log(equippedGearID);
+
       const newTotalDistance = equippedGearDistance + activity?.sessions[0]?.total_distance;
       const updatedGearData = {
         userID,
         id: equippedGearID,
         distance: newTotalDistance,
       };
+
       updateGearData(updatedGearData);
     });
 
@@ -128,6 +131,7 @@ const CreateActivityForm = () => {
         addActivity(customActivityData).then(() => {
           setIsCreateActivitySuccessful(true);
           setIsCreateSuccessAlertOpen(true);
+          fetchUser();
         });
       });
     }
@@ -200,6 +204,10 @@ const CreateActivityForm = () => {
       </Form>
     </div>
   );
+};
+
+CreateActivityForm.propTypes = {
+  fetchUser: PropTypes.func.isRequired,
 };
 
 export default CreateActivityForm;

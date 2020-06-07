@@ -1,13 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Navbar, Nav, NavItem, NavLink, Row, Col } from 'reactstrap';
 import { NavLink as RRNavLink } from 'react-router-dom';
 import './Footer.scss';
-import logo from './sufferPalSquare.png';
+import logo from '../../assets/sufferPalSquare.png';
 
 const Footer = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const toggle = () => setIsOpen(!isOpen);
-
   return (
     <div className="Footer">
       <Row className="Col-format">
@@ -29,11 +26,6 @@ const Footer = () => {
               <NavItem>
                 <NavLink id="font-list" tag={RRNavLink} exact to="/calendar">
                   Calendar
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink id="font-list" tag={RRNavLink} exact to="/timeline">
-                  Timeline
                 </NavLink>
               </NavItem>
             </Nav>
