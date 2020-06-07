@@ -1,4 +1,12 @@
 .ActivityDetailPage {
+  .profile-picture {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: 100% 0;
+  }
+
   .sufferpal-logo {
     width: 300px;
     display: block;

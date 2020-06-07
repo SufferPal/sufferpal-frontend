@@ -11,6 +11,7 @@ import MapContainer from '../../components/Map/MapContainer';
 import SufferPalLogo from '../../assets/logo-sufferpal.png';
 import '../ActivityDetailPage/ActivityDetailPage.scss';
 import MileSplitsTable from '../../components/MileSplitsTable/MileSplitsTable';
+import { useSelector } from 'react-redux';
 import SplitsGraph from '../../components/SplitsGraph/SplitsGraph';
 
 const ActivityDetailPage = () => {
@@ -21,6 +22,7 @@ const ActivityDetailPage = () => {
   const speedData = [];
   const HRData = [];
   const cadenceData = [];
+  const profilePictureHref = useSelector((state) => state.profilePictureHref);
 
   //DATE
   const isoString = new Date(activityState.startTime).toISOString();
@@ -63,7 +65,9 @@ const ActivityDetailPage = () => {
       <div className="ActivityDetailPage pt-4">
         <img className="sufferpal-logo" src={SufferPalLogo} alt="SufferPal Logo" />
         <Row>
-          <Col md="2"></Col>
+          <Col md="2">
+            <img className="profile-picture" src={profilePictureHref} alt="Profile" />
+          </Col>
           <Col md="10">
             <div>
               <Row>
