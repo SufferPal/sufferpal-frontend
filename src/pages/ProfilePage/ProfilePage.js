@@ -17,6 +17,7 @@ const ProfilePage = () => {
   const [equippedGear, setEquippedGear] = useState();
   const userID = useSelector((state) => state.user.id);
   const profilePictureS3Key = useSelector((state) => state.profilePictureS3Key);
+  const [isModalButtonDisabled, setIsModalButtonDisabled] = useState(true);
 
   const determineEquippedGear = useCallback((gear) => {
     if (gear) {
@@ -36,7 +37,12 @@ const ProfilePage = () => {
       setUserData(userData.data.getUser);
       const userProfilePictureS3Key = userData.data.getUser.profilePictureS3FileKey;
       const gear = userData.data.getUser.gear.items;
+
       setEquippedGear(determineEquippedGear(gear));
+
+      if (isModalButtonDisabled) {
+        setIsModalButtonDisabled(false);
+      }
 
       if (userProfilePictureS3Key !== profilePictureS3Key) {
         dispatch(setProfilePictureS3Key(userProfilePictureS3Key));
@@ -47,7 +53,7 @@ const ProfilePage = () => {
     } catch (error) {
       console.log(error);
     }
-  }, [userID, determineEquippedGear, profilePictureS3Key, dispatch]);
+  }, [userID, determineEquippedGear, profilePictureS3Key, dispatch, isModalButtonDisabled]);
 
   useEffect(() => {
     fetchUser();
@@ -58,7 +64,12 @@ const ProfilePage = () => {
       <div className="ProfilePage pt-4">
         <Row>
           <Col md="4">
-            <ProfileCard userData={userData} fetchUser={fetchUser} equippedGear={equippedGear} />
+            <ProfileCard
+              isModalButtonDisabled={isModalButtonDisabled}
+              userData={userData}
+              fetchUser={fetchUser}
+              equippedGear={equippedGear}
+            />
           </Col>
           <Col md="8" className="p-0">
             <div className="your-activities-cont d-flex align-items-center justify-content-start px-3 py-2 mb-3">

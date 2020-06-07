@@ -7,7 +7,7 @@ import AddGearModal from '../AddGearModal/AddGearModal';
 import ViewGearModal from '../ViewGearModal/ViewGearModal';
 import './ProfileCard.scss';
 
-const ProfileCard = ({ userData, fetchUser, equippedGear }) => {
+const ProfileCard = ({ userData, fetchUser, equippedGear, isModalButtonDisabled }) => {
   const { gear, firstName, lastName, gender, weight, age } = userData;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const profilePictureHref = useSelector((state) => state.profilePictureHref);
@@ -53,13 +53,13 @@ const ProfileCard = ({ userData, fetchUser, equippedGear }) => {
               </tbody>
             </Table>
           </div>
-          <Button color="danger" onClick={toggleSettingsModal}>
+          <Button disabled={isModalButtonDisabled} color="danger" onClick={toggleSettingsModal}>
             Edit
           </Button>
-          <Button color="success" onClick={toggleAddGearModal}>
+          <Button disabled={isModalButtonDisabled} color="success" onClick={toggleAddGearModal}>
             Add Gear
           </Button>
-          <Button color="success" onClick={toggleViewGearModal}>
+          <Button disabled={isModalButtonDisabled} color="success" onClick={toggleViewGearModal}>
             View Gear
           </Button>
           <SettingsModal
@@ -105,6 +105,7 @@ ProfileCard.propTypes = {
     model: PropTypes.string,
     brand: PropTypes.string,
   }),
+  isModalButtonDisabled: PropTypes.bool.isRequired,
 };
 
 ProfileCard.defaultProps = {
