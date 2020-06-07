@@ -11,12 +11,12 @@ import MapContainer from '../../components/Map/MapContainer';
 import SufferPalLogo from '../../assets/logo-sufferpal.png';
 import '../ActivityDetailPage/ActivityDetailPage.scss';
 import MileSplitsTable from '../../components/MileSplitsTable/MileSplitsTable';
+import SplitsGraph from '../../components/SplitsGraph/SplitsGraph';
 
 const ActivityDetailPage = () => {
   const location = useLocation();
   const activityState = location.state?.activity;
   const [rawMeasurements, setRawMeasurements] = useState([]);
-  //const [splits, setSplits] = useState([]);
   const S3_Key = activityState.rawMeasurementsS3FileKey;
   const speedData = [];
   const HRData = [];
@@ -57,7 +57,6 @@ const ActivityDetailPage = () => {
   };
 
   dataArray();
-  //const splits = mileSplits(rawMeasurements);
 
   return (
     <DefaultTemplate>

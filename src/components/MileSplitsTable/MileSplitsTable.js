@@ -2,12 +2,13 @@ import React from 'react';
 import { Table } from 'reactstrap';
 import { mileSplits, calculatePace } from '../../shared/functions/helpers';
 import '../../components/MileSplitsTable/MileSplitsTable.scss';
+import SplitsGraph from '../SplitsGraph/SplitsGraph';
 
 const MileSplitsTable = ({ SplitData }) => {
   const splits = mileSplits(SplitData);
 
   return (
-    <div className="table">
+    <div className="table-div">
       <Table className="table">
         <thead>
           <tr className="header">
@@ -34,6 +35,7 @@ const MileSplitsTable = ({ SplitData }) => {
           })}{' '}
         </tbody>
       </Table>
+      <SplitsGraph SplitData={splits} />
     </div>
   );
 };
