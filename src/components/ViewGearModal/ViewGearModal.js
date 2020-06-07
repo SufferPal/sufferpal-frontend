@@ -58,6 +58,21 @@ const ViewGearModal = ({ fetchUser, toggleViewGearModal, isModalOpen, gear }) =>
     await API.graphql(graphqlOperation(deleteGear, { input: gear }));
   };
 
+  const handleGearEquippedChange = (event) => {
+    console.log(event.target.checked);
+
+    const equippedGearCheckboxes = document.getElementsByClassName('equipped-gear');
+    console.log(equippedGearCheckboxes);
+    Array.from(equippedGearCheckboxes).forEach((checkbox) => {
+      console.log(checkbox);
+      checkbox.checked = false;
+    });
+    event.target.checked = true;
+    // for (let i = 0; i <= x.length; i++) {
+    //   x[i].checked = false;
+    // }
+  };
+
   return (
     <div className="ViewGearModal">
       <Modal isOpen={isModalOpen} toggle={toggleViewGearModal}>
@@ -84,7 +99,7 @@ const ViewGearModal = ({ fetchUser, toggleViewGearModal, isModalOpen, gear }) =>
                     <td>{gearItem.distance.toFixed(2)}</td>
                     <td>{gearItem.datePurchased}</td>
                     <td>
-                      <Input type="checkbox" />
+                      <Input type="checkbox" className="equipped-gear" onClick={handleGearEquippedChange} />
                     </td>
                     <td>
                       <FontAwesomeIcon
