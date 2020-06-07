@@ -109,7 +109,10 @@ ProfileCard.propTypes = {
 
 ProfileCard.defaultProps = {
   userData: {},
-  equippedGear: {},
+  equippedGear: {
+    brand: '',
+    model: '',
+  },
 };
 
 export default ProfileCard;

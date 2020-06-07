@@ -33,7 +33,7 @@ const ActivityCard = ({ firstName, lastName, activity }) => {
     <div className="ActivityCard w-100 py-2 px-4 mb-3">
       <Row onClick={handleActivityCardClick}>
         <Col sm="3" className="d-flex flex-column justify-content-start align-items-center">
-          <img className="profile-picture-container mb-2 " src={profilePictureHref} alt="profilePicture" />
+          <img className="profile-picture mb-2 " src={profilePictureHref} alt="profilePicture" />
           <h3 className="user-name mb-2">
             {firstName} {lastName}
           </h3>
