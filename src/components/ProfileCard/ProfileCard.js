@@ -1,16 +1,16 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Card, CardImg, Table, CardBody, CardTitle, Button } from 'reactstrap';
 import SettingsModal from '../SettingsModal/SettingsModal';
 import AddGearModal from '../AddGearModal/AddGearModal';
 import ViewGearModal from '../ViewGearModal/ViewGearModal';
 import './ProfileCard.scss';
-import Storage from '@aws-amplify/storage';
 
 const ProfileCard = ({ userData, fetchUser, equippedGear }) => {
-  const { profilePictureS3FileKey, gear, firstName, lastName, gender, weight, age } = userData;
+  const { gear, firstName, lastName, gender, weight, age } = userData;
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [profilePictureURL, setProfilePictureURL] = useState(null);
+  const profilePictureHref = useSelector((state) => state.profilePictureHref);
   const [isAddGearModalOpen, setIsAddGearModalOpen] = useState(false);
   const [isViewGearModalOpen, setIsViewGearModalOpen] = useState(false);
 
@@ -20,26 +20,10 @@ const ProfileCard = ({ userData, fetchUser, equippedGear }) => {
 
   const toggleViewGearModal = () => setIsViewGearModalOpen(!isViewGearModalOpen);
 
-  const getProfilePictureFromS3 = useCallback(async () => {
-    try {
-      if (profilePictureS3FileKey) {
-        Storage.get(profilePictureS3FileKey).then((result) => {
-          setProfilePictureURL(result);
-        });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }, [profilePictureS3FileKey]);
-
-  useEffect(() => {
-    getProfilePictureFromS3();
-  }, [getProfilePictureFromS3]);
-
   return (
     <div className="ProfileCard">
       <Card className="card pt-3 profile-card-inner">
-        <CardImg top className="profile-picture" src={profilePictureURL} alt="Card image cap" />
+        <CardImg top className="profile-picture" src={profilePictureHref} alt="Card image cap" />
         <CardBody>
           <CardTitle className="font-styles">
             {firstName} {lastName}

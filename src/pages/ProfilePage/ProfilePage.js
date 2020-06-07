@@ -1,18 +1,22 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import DefaultTemplate from '../../templates/DefaultTemplate/DefaultTemplate';
 import { Row, Col } from 'reactstrap';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import ActivityCardContainer from '../../components/ActivityCardContainer/ActivityCardContainer';
 import CreateActivityForm from '../../components/CreateActivityForm/CreateActivityForm';
 import ProfileCard from '../../components/ProfileCard/ProfileCard';
 import { API, graphqlOperation } from 'aws-amplify';
 import { getUser } from '../../graphql/queries';
 import './ProfilePage.scss';
+import { setProfilePictureS3Key, setProfilePictureHref } from '../../store/action-creators';
+import Storage from '@aws-amplify/storage';
 
 const ProfilePage = () => {
+  const dispatch = useDispatch();
   const [userData, setUserData] = useState();
   const [equippedGear, setEquippedGear] = useState();
   const userID = useSelector((state) => state.user.id);
+  const profilePictureS3Key = useSelector((state) => state.profilePictureS3Key);
 
   const determineEquippedGear = useCallback((gear) => {
     if (gear) {
@@ -30,13 +34,20 @@ const ProfilePage = () => {
       const userData = await API.graphql(graphqlOperation(getUser, { id: userID }));
 
       setUserData(userData.data.getUser);
+      const userProfilePictureS3Key = userData.data.getUser.profilePictureS3FileKey;
       const gear = userData.data.getUser.gear.items;
-      console.log(gear);
       setEquippedGear(determineEquippedGear(gear));
+
+      if (userProfilePictureS3Key !== profilePictureS3Key) {
+        dispatch(setProfilePictureS3Key(userProfilePictureS3Key));
+        Storage.get(userProfilePictureS3Key).then((result) => {
+          dispatch(setProfilePictureHref(result));
+        });
+      }
     } catch (error) {
-      console.log('Error');
+      console.log(error);
     }
-  }, [userID, determineEquippedGear]);
+  }, [userID, determineEquippedGear, profilePictureS3Key, dispatch]);
 
   useEffect(() => {
     fetchUser();
