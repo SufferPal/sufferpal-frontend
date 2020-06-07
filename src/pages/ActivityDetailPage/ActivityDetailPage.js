@@ -60,9 +60,8 @@ const ActivityDetailPage = () => {
 
   return (
     <DefaultTemplate>
-      <img className="sufferpal-logo" src={SufferPalLogo} alt="SufferPal Logo" />
-
       <div className="ActivityDetailPage pt-4">
+        <img className="sufferpal-logo" src={SufferPalLogo} alt="SufferPal Logo" />
         <Row>
           <Col md="2"></Col>
           <Col md="10">
