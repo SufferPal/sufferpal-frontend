@@ -145,7 +145,7 @@ const ActivityDetailPage = () => {
               </Row>
               <HeartRateGraph activity={HRData} />
             </div>
-            <div>
+            <div className="bottom">
               <Row>
                 <Col>
                   <p className="graphTitle">Cadence</p>
