@@ -64,7 +64,7 @@ const ProfileCard = ({ userData, fetchUser, equippedGear }) => {
                   <th scope="row" className="setting-labels">
                     Equipped Gear:
                   </th>
-                  <td>{equippedGear}</td>
+                  <td>{`${equippedGear.brand} ${equippedGear.model}`}</td>
                 </tr>
               </tbody>
             </Table>
@@ -95,6 +95,7 @@ const ProfileCard = ({ userData, fetchUser, equippedGear }) => {
             isModalOpen={isViewGearModalOpen}
             toggleViewGearModal={toggleViewGearModal}
             gear={gear}
+            equippedGear={equippedGear}
             fetchUser={fetchUser}
           />
         </CardBody>
@@ -116,12 +117,15 @@ ProfileCard.propTypes = {
     age: PropTypes.number,
   }),
   fetchUser: PropTypes.func.isRequired,
-  equippedGear: PropTypes.string,
+  equippedGear: PropTypes.shape({
+    model: PropTypes.string,
+    brand: PropTypes.string,
+  }),
 };
 
 ProfileCard.defaultProps = {
   userData: {},
-  equippedGear: '',
+  equippedGear: {},
 };
 
 export default ProfileCard;

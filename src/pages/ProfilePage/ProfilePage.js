@@ -21,7 +21,7 @@ const ProfilePage = () => {
         return gearItem.isEquipped;
       });
 
-      return `${equippedGear[0].brand} ${equippedGear[0].model}`;
+      return equippedGear[0];
     }
   }, []);
 
