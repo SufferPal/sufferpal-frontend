@@ -36,9 +36,27 @@ export const onCreateUser = /* GraphQL */ `
           sport
           rawMeasurementsS3FileKey
           description
+          createdAt
+          updatedAt
         }
         nextToken
       }
+      gear {
+        items {
+          id
+          userID
+          brand
+          model
+          datePurchased
+          isEquipped
+          distance
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -77,9 +95,27 @@ export const onUpdateUser = /* GraphQL */ `
           sport
           rawMeasurementsS3FileKey
           description
+          createdAt
+          updatedAt
         }
         nextToken
       }
+      gear {
+        items {
+          id
+          userID
+          brand
+          model
+          datePurchased
+          isEquipped
+          distance
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -118,9 +154,27 @@ export const onDeleteUser = /* GraphQL */ `
           sport
           rawMeasurementsS3FileKey
           description
+          createdAt
+          updatedAt
         }
         nextToken
       }
+      gear {
+        items {
+          id
+          userID
+          brand
+          model
+          datePurchased
+          isEquipped
+          distance
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -142,6 +196,8 @@ export const onCreateActivity = /* GraphQL */ `
       sport
       rawMeasurementsS3FileKey
       description
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -163,6 +219,8 @@ export const onUpdateActivity = /* GraphQL */ `
       sport
       rawMeasurementsS3FileKey
       description
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -184,6 +242,53 @@ export const onDeleteActivity = /* GraphQL */ `
       sport
       rawMeasurementsS3FileKey
       description
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateGear = /* GraphQL */ `
+  subscription OnCreateGear {
+    onCreateGear {
+      id
+      userID
+      brand
+      model
+      datePurchased
+      isEquipped
+      distance
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateGear = /* GraphQL */ `
+  subscription OnUpdateGear {
+    onUpdateGear {
+      id
+      userID
+      brand
+      model
+      datePurchased
+      isEquipped
+      distance
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteGear = /* GraphQL */ `
+  subscription OnDeleteGear {
+    onDeleteGear {
+      id
+      userID
+      brand
+      model
+      datePurchased
+      isEquipped
+      distance
+      createdAt
+      updatedAt
     }
   }
 `;

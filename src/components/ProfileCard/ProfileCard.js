@@ -1,36 +1,32 @@
-import React, { useEffect, useState } from 'react';
-import { Card, CardImg, Table, CardText, CardBody, CardTitle, Button } from 'reactstrap';
-import SettingsModal from '../SettingsModal/SettingsModal';
-import './ProfileCard.scss';
-import ProfilePic from './runner-image.jpeg';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { API, graphqlOperation } from 'aws-amplify';
-import { getUser } from '../../graphql/queries';
+import PropTypes from 'prop-types';
+import { Card, CardImg, Table, CardBody, CardTitle, Button } from 'reactstrap';
+import SettingsModal from '../SettingsModal/SettingsModal';
+import AddGearModal from '../AddGearModal/AddGearModal';
+import ViewGearModal from '../ViewGearModal/ViewGearModal';
+import './ProfileCard.scss';
 
-const ProfileCard = (props) => {
-  const userID = useSelector((state) => state.user.id);
-  const [userData, setUserData] = useState({});
+const ProfileCard = ({ userData, fetchUser, equippedGear, isModalButtonDisabled }) => {
+  const { gear, firstName, lastName, gender, weight, age } = userData;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const profilePictureHref = useSelector((state) => state.profilePictureHref);
+  const [isAddGearModalOpen, setIsAddGearModalOpen] = useState(false);
+  const [isViewGearModalOpen, setIsViewGearModalOpen] = useState(false);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const userDataFromCall = await API.graphql(graphqlOperation(getUser, { id: userID }));
-        console.log(userDataFromCall);
-        setUserData(userDataFromCall.data.getUser);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchUser();
-  }, []);
+  const toggleSettingsModal = () => setIsModalOpen(!isModalOpen);
+
+  const toggleAddGearModal = () => setIsAddGearModalOpen(!isAddGearModalOpen);
+
+  const toggleViewGearModal = () => setIsViewGearModalOpen(!isViewGearModalOpen);
 
   return (
-    <div className="ProfileCardDiv">
-      <Card className="card">
-        <CardImg top width="100%" src={ProfilePic} alt="Card image cap" />
+    <div className="ProfileCard">
+      <Card className="card pt-3 profile-card-inner">
+        <CardImg top className="profile-picture" src={profilePictureHref} alt="Card image cap" />
         <CardBody>
           <CardTitle className="font-styles">
-            {userData.firstName} {userData.lastName}
+            {firstName} {lastName}
           </CardTitle>
           <div className="setting-labels">
             User Settings
@@ -38,30 +34,86 @@ const ProfileCard = (props) => {
               <tbody>
                 <tr>
                   <th scope="row">Gender:</th>
-                  <td>{userData.gender}</td>
+                  <td>{gender}</td>
                 </tr>
                 <tr>
                   <th scope="row">Weight:</th>
-                  <td>{userData.weight}</td>
+                  <td>{weight}</td>
                 </tr>
                 <tr>
                   <th scope="row">Birthday:</th>
-                  <td>{userData.age}</td>
+                  <td>{age}</td>
                 </tr>
                 <tr>
                   <th scope="row" className="setting-labels">
                     Equipped Gear:
                   </th>
-                  <td>endpoint for Equipped Gear</td>
+                  <td>{`${equippedGear.brand} ${equippedGear.model}`}</td>
                 </tr>
               </tbody>
             </Table>
           </div>
-          <SettingsModal />
+          <Button disabled={isModalButtonDisabled} color="danger" onClick={toggleSettingsModal}>
+            Edit
+          </Button>
+          <Button disabled={isModalButtonDisabled} color="success" onClick={toggleAddGearModal}>
+            Add Gear
+          </Button>
+          <Button disabled={isModalButtonDisabled} color="success" onClick={toggleViewGearModal}>
+            View Gear
+          </Button>
+          <SettingsModal
+            isModalOpen={isModalOpen}
+            toggleSettingsModal={toggleSettingsModal}
+            firstName={firstName}
+            lastName={lastName}
+            weight={weight}
+            fetchUser={fetchUser}
+          />
+          <AddGearModal
+            isModalOpen={isAddGearModalOpen}
+            toggleAddGearModal={toggleAddGearModal}
+            fetchUser={fetchUser}
+          />
+          <ViewGearModal
+            isModalOpen={isViewGearModalOpen}
+            toggleViewGearModal={toggleViewGearModal}
+            gear={gear}
+            equippedGear={equippedGear}
+            fetchUser={fetchUser}
+          />
         </CardBody>
       </Card>
     </div>
   );
+};
+
+ProfileCard.propTypes = {
+  userData: PropTypes.shape({
+    profilePictureS3FileKey: PropTypes.string,
+    gear: PropTypes.shape({
+      items: PropTypes.array,
+    }),
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    gender: PropTypes.string,
+    weight: PropTypes.number,
+    age: PropTypes.number,
+  }),
+  fetchUser: PropTypes.func.isRequired,
+  equippedGear: PropTypes.shape({
+    model: PropTypes.string,
+    brand: PropTypes.string,
+  }),
+  isModalButtonDisabled: PropTypes.bool.isRequired,
+};
+
+ProfileCard.defaultProps = {
+  userData: {},
+  equippedGear: {
+    brand: '',
+    model: '',
+  },
 };
 
 export default ProfileCard;
