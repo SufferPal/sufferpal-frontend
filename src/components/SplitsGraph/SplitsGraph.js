@@ -1,6 +1,6 @@
 import React from 'react';
 import '../../styles/GraphStyles/GraphStyles.scss';
-import { XYPlot, LineSeries, VerticalBarSeries, VerticalBarSeriesCanvas, XAxis, YAxis, BarSeries } from 'react-vis';
+import { XYPlot, VerticalBarSeries, XAxis, YAxis } from 'react-vis';
 import { calculatePace } from '../../shared/functions/helpers';
 import '../SplitsGraph/SplitsGraph.scss';
 

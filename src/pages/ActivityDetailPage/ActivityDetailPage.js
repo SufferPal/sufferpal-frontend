@@ -12,7 +12,6 @@ import SufferPalLogo from '../../assets/logo-sufferpal.png';
 import '../ActivityDetailPage/ActivityDetailPage.scss';
 import MileSplitsTable from '../../components/MileSplitsTable/MileSplitsTable';
 import { useSelector } from 'react-redux';
-import SplitsGraph from '../../components/SplitsGraph/SplitsGraph';
 
 const ActivityDetailPage = () => {
   const location = useLocation();

@@ -20,7 +20,6 @@ const MileSplitsTable = ({ SplitData }) => {
           </tr>
         </thead>
         <tbody className="table-data">
-          {' '}
           {splits?.map((split, index) => {
             return (
               <tr key={index}>
@@ -32,7 +31,7 @@ const MileSplitsTable = ({ SplitData }) => {
                 <td></td>
               </tr>
             );
-          })}{' '}
+          })}
         </tbody>
       </Table>
       <SplitsGraph SplitData={splits} />
