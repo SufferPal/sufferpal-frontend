@@ -5,9 +5,7 @@ import { XYPlot, LineSeries, VerticalGridLines, HorizontalGridLines, XAxis, YAxi
 //import { useLocation } from 'react-router-dom';
 
 const HeartRateGraph = (activity) => {
-  //console.log('speedData record', activity);
-  console.log('HR record', activity.activity);
-  console.log('HR record', activity.activity[1]);
+  //console.log('HR record', activity.activity);
 
   const data = activity.activity;
 

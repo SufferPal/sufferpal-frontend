@@ -5,9 +5,7 @@ import { XYPlot, LineSeries, VerticalGridLines, HorizontalGridLines, XAxis, YAxi
 //import { useLocation } from 'react-router-dom';
 
 const SpeedGraph = (activity) => {
-  //console.log('speedData record', activity);
-  console.log('speedData record', activity.activity);
-  console.log('speedData record', activity.activity[1]);
+  //console.log('speedData record', activity.activity);
 
   const data = activity.activity;
 
