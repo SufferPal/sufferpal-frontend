@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import './ActivityCard.scss';
 import { Row, Col } from 'reactstrap';
@@ -7,20 +8,17 @@ import MapContainer from '../Map/MapContainer';
 import Storage from '@aws-amplify/storage';
 import { useHistory } from 'react-router-dom';
 
-const ActivityCard = ({ firstName, lastName, profilePictureS3FileKey, activity }) => {
+const ActivityCard = ({ firstName, lastName, activity }) => {
   const { avgHeartRate, totalMovingTime, totalDistance, description, rawMeasurementsS3FileKey } = activity;
   const [rawMeasurements, setRawMeasurements] = useState([]);
   const history = useHistory();
-  const [profilePictureURL, setProfilePictureURL] = useState('');
+  const profilePictureHref = useSelector((state) => state.profilePictureHref);
 
   useEffect(() => {
     Storage.get(rawMeasurementsS3FileKey, { download: true }).then((result) => {
       setRawMeasurements(result.Body);
     });
-    Storage.get(profilePictureS3FileKey).then((result) => {
-      setProfilePictureURL(result);
-    });
-  }, [profilePictureS3FileKey, rawMeasurementsS3FileKey]);
+  }, [rawMeasurementsS3FileKey]);
 
   const handleActivityCardClick = () => {
     history.push({
@@ -35,7 +33,7 @@ const ActivityCard = ({ firstName, lastName, profilePictureS3FileKey, activity }
     <div className="ActivityCard w-100 py-2 px-4 mb-3">
       <Row onClick={handleActivityCardClick}>
         <Col sm="3" className="d-flex flex-column justify-content-start align-items-center">
-          <img className="profile-picture-container mb-2 " src={profilePictureURL} alt="profilePicture" />
+          <img className="profile-picture-container mb-2 " src={profilePictureHref} alt="profilePicture" />
           <h3 className="user-name mb-2">
             {firstName} {lastName}
           </h3>
@@ -91,7 +89,6 @@ const ActivityCard = ({ firstName, lastName, profilePictureS3FileKey, activity }
 ActivityCard.propTypes = {
   firstName: PropTypes.string,
   lastName: PropTypes.string,
-  profilePictureS3FileKey: PropTypes.string,
   activity: PropTypes.shape({
     avgHeartRate: PropTypes.number,
     totalMovingTime: PropTypes.number,
@@ -105,7 +102,6 @@ ActivityCard.propTypes = {
 ActivityCard.defaultProps = {
   firstName: '',
   lastName: '',
-  profilePictureS3FileKey: '',
   activity: {},
 };
 

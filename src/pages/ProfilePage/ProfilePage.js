@@ -70,7 +70,6 @@ const ProfilePage = () => {
             <ActivityCardContainer
               firstName={userData?.firstName}
               lastName={userData?.lastName}
-              profilePictureS3FileKey={userData?.profilePictureS3FileKey}
               activities={userData?.activities?.items}
             />
           </Col>
