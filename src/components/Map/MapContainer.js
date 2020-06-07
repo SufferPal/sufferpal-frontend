@@ -28,8 +28,8 @@ const MapContainer = ({ rawMeasurements = [], mapDimensions }) => {
       {
         <Map
           // eslint-disable-next-line react/style-prop-object
-          style="mapbox://styles/jmikrut08/ckabcy0010o7v1ip66qfgqnte"
-          zoom={[10]}
+          style="mapbox://styles/jmikrut08/cka7gql881ifp1ilovnwjm5d4"
+          zoom={[13]}
           center={centerCoordinates}
           containerStyle={mapDimensions}
         >

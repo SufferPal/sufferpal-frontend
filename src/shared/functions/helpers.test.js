@@ -4,6 +4,7 @@ import {
   createCustomTimeString,
   getSplitNumberArray,
   setMapCenterCoordinates,
+  mileSplits,
 } from './helpers';
 
 describe('test setupMapGeoJSONData', () => {
@@ -126,5 +127,88 @@ describe('test setMapCenterCoordinates', () => {
         [1, 3],
       ])
     ).toEqual([1, 4]);
+  });
+});
+
+describe('test mileSplit', () => {
+  it('should return a data in split mile', () => {
+    expect(
+      mileSplits([
+        {
+          cadence: 84,
+          distance: 0,
+          elapsed_time: 1,
+          heart_rate: 120,
+          speed: 10,
+        },
+        {
+          cadence: 85,
+          distance: 0.5,
+          elapsed_time: 2,
+          heart_rate: 130,
+          speed: 11,
+        },
+        {
+          cadence: 86,
+          distance: 1,
+          elapsed_time: 3,
+          heart_rate: 140,
+          speed: 12,
+        },
+        {
+          cadence: 87,
+          distance: 1.5,
+          elapsed_time: 4,
+          heart_rate: 155,
+          speed: 13,
+        },
+        {
+          cadence: 85,
+          distance: 2,
+          elapsed_time: 5,
+          heart_rate: 160,
+          speed: 14,
+        },
+        {
+          cadence: 84,
+          distance: 2.5,
+          elapsed_time: 6,
+          heart_rate: 130,
+          speed: 15,
+        },
+        {
+          cadence: 80,
+          distance: 3,
+          elapsed_time: 7,
+          heart_rate: 120,
+          speed: 10,
+        },
+      ])
+    ).toEqual([
+      {
+        id: 2,
+        mile: 1,
+        mileTime: 3,
+        avgSpeed: 11.5,
+        avgHR: 135,
+        avgCadence: 171,
+      },
+      {
+        id: 4,
+        mile: 2,
+        mileTime: 2,
+        avgSpeed: 13.5,
+        avgHR: 157.5,
+        avgCadence: 172,
+      },
+      {
+        id: 6,
+        mile: 3,
+        mileTime: 2,
+        avgSpeed: 12.5,
+        avgHR: 125,
+        avgCadence: 164,
+      },
+    ]);
   });
 });
