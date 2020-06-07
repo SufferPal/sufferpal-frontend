@@ -6,15 +6,17 @@ import SpeedGraph from '../../components/SpeedGraph/SpeedGraph';
 import HeartRateGraph from '../../components/HeartRateGraph/HeartRateGraph';
 import CadenceGraph from '../../components/CadenceGraph/CadenceGraph';
 import Storage from '@aws-amplify/storage';
-import { calculatePace, createCustomTimeString, mileSplits } from '../../shared/functions/helpers';
+import { calculatePace, createCustomTimeString } from '../../shared/functions/helpers';
 import MapContainer from '../../components/Map/MapContainer';
 import SufferPalLogo from '../../assets/logo-sufferpal.png';
 import '../ActivityDetailPage/ActivityDetailPage.scss';
+import MileSplitsTable from '../../components/MileSplitsTable/MileSplitsTable';
 
 const ActivityDetailPage = () => {
   const location = useLocation();
   const activityState = location.state?.activity;
   const [rawMeasurements, setRawMeasurements] = useState([]);
+  //const [splits, setSplits] = useState([]);
   const S3_Key = activityState.rawMeasurementsS3FileKey;
   const speedData = [];
   const HRData = [];
@@ -32,7 +34,7 @@ const ActivityDetailPage = () => {
   const optionsTime = { hour: 'numeric', minute: 'numeric' };
   const time = new Date(isoStringTime);
   const americanTime = new Intl.DateTimeFormat('en-US', optionsTime).format(time);
-  console.log(americanTime);
+  //console.log(americanTime);
 
   useEffect(() => {
     Storage.get(S3_Key, { download: true }).then((result) => {
@@ -55,8 +57,7 @@ const ActivityDetailPage = () => {
   };
 
   dataArray();
-  mileSplits(rawMeasurements);
-  //console.log("raw", rawMeasurements);
+  //const splits = mileSplits(rawMeasurements);
 
   return (
     <DefaultTemplate>
@@ -74,7 +75,7 @@ const ActivityDetailPage = () => {
                     rawMeasurements={rawMeasurements}
                     mapDimensions={{
                       height: '500px',
-                      width: '900px',
+                      width: '750px',
                     }}
                   />
                 </div>
@@ -115,6 +116,9 @@ const ActivityDetailPage = () => {
                     </ListGroupItem>
                   </ListGroup>
                 </Col>
+              </Row>
+              <Row>
+                <MileSplitsTable SplitData={rawMeasurements} />
               </Row>
               <Row>
                 <Col>

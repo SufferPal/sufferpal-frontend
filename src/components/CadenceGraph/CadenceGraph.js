@@ -5,9 +5,7 @@ import { XYPlot, LineSeries, VerticalGridLines, HorizontalGridLines, XAxis, YAxi
 //import { useLocation } from 'react-router-dom';
 
 const CadenceGraph = (activity) => {
-  //console.log('speedData record', activity);
-  console.log('Cadence', activity.activity);
-  console.log('Cadence', activity.activity[1]);
+  //console.log('Cadence', activity.activity);
 
   const data = activity.activity;
 
