@@ -1,34 +1,45 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import SettingsForm, { checkUpdates } from '../SettingsForm/SettingsForm';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import SettingsForm from '../SettingsForm/SettingsForm';
 
-const SettingsModal = (props) => {
-  const [modal, setModal] = useState(false);
-
-  const toggle = () => setModal(!modal);
-
+const SettingsModal = ({ fetchUser, firstName, lastName, weight, toggleSettingsModal, isModalOpen }) => {
   return (
-    <div>
-      <Button color="danger" onClick={toggle}>
-        Edit
-      </Button>
-      <Modal isOpen={modal} toggle={toggle}>
-        <ModalHeader toggle={toggle}>Edit Birthday</ModalHeader>
+    <div className="SettingsModal">
+      <Modal isOpen={isModalOpen} toggle={toggleSettingsModal}>
+        <ModalHeader toggle={toggleSettingsModal}>Edit User</ModalHeader>
         <ModalBody>
-          <SettingsForm />
+          <SettingsForm
+            toggleSettingsModal={toggleSettingsModal}
+            firstName={firstName}
+            lastName={lastName}
+            weight={weight}
+            fetchUser={fetchUser}
+          />
         </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={toggle}>
-            Do Something
-          </Button>{' '}
-          <Button color="secondary" onClick={toggle}>
-            Cancel
-          </Button>
-        </ModalFooter>
       </Modal>
     </div>
   );
+};
+
+SettingsModal.propTypes = {
+  fetchUser: PropTypes.func.isRequired,
+  firstName: PropTypes.string,
+  lastName: PropTypes.string,
+  weight: PropTypes.number,
+  gear: PropTypes.shape({
+    items: PropTypes.array,
+  }),
+  toggleSettingsModal: PropTypes.func.isRequired,
+  isModalOpen: PropTypes.bool.isRequired,
+};
+
+SettingsModal.defaultProps = {
+  firstName: '',
+  lastName: '',
+  weight: 0,
+  gear: {},
 };
 
 export default SettingsModal;

@@ -7,7 +7,7 @@ const Map = ReactMapboxGl({
   accessToken: 'pk.eyJ1Ijoiam1pa3J1dDA4IiwiYSI6ImNrYTdnN3A4djAzZGUycXBtNHhpN25wN2oifQ.37cxxJ1_4PvsX71YbaTv3Q',
 });
 
-const MapContainer = ({ rawMeasurements = [] }) => {
+const MapContainer = ({ rawMeasurements = [], mapDimensions }) => {
   const [coordinates, setCoordinates] = useState([]);
   const [centerCoordinates, setCenterCoordinates] = useState([-87.81415463425219, 41.89763618633151]);
 
@@ -17,10 +17,8 @@ const MapContainer = ({ rawMeasurements = [] }) => {
   };
 
   useEffect(() => {
-    console.log(rawMeasurements);
     const rawMeasurementCoordinates = setupMapGeoJSONData(rawMeasurements);
     const centerCoordinates = setMapCenterCoordinates(rawMeasurementCoordinates);
-    console.log(centerCoordinates);
     setCoordinates(rawMeasurementCoordinates);
     setCenterCoordinates(centerCoordinates);
   }, [rawMeasurements]);
@@ -30,13 +28,10 @@ const MapContainer = ({ rawMeasurements = [] }) => {
       {
         <Map
           // eslint-disable-next-line react/style-prop-object
-          style="mapbox://styles/jmikrut08/ckabcy0010o7v1ip66qfgqnte"
-          zoom={[10]}
+          style="mapbox://styles/jmikrut08/cka7gql881ifp1ilovnwjm5d4"
+          zoom={[13]}
           center={centerCoordinates}
-          containerStyle={{
-            height: '300px',
-            width: '400px',
-          }}
+          containerStyle={mapDimensions}
         >
           <GeoJSONLayer
             data={{

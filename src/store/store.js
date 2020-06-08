@@ -11,9 +11,16 @@ let user = {
 
 export const initialState = {
   user,
+  profilePictureS3Key: null,
+  profilePictureHref: null,
 };
 
-const persistConfig = { key: 'root', storage, stateReconciler: autoMergeLevel2, whitelist: ['user'] };
+const persistConfig = {
+  key: 'root',
+  storage,
+  stateReconciler: autoMergeLevel2,
+  whitelist: ['user', 'profilePictureS3Key', 'profilePictureHref'],
+};
 const persistedReducer = persistReducer(persistConfig, reducer);
 export const store = createStore(persistedReducer, initialState, composeWithDevTools());
 export const persistor = persistStore(store);

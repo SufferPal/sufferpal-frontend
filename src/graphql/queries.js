@@ -36,9 +36,27 @@ export const getUser = /* GraphQL */ `
           sport
           rawMeasurementsS3FileKey
           description
+          createdAt
+          updatedAt
         }
         nextToken
       }
+      gear {
+        items {
+          id
+          userID
+          brand
+          model
+          datePurchased
+          isEquipped
+          distance
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -64,6 +82,11 @@ export const listUsers = /* GraphQL */ `
         activities {
           nextToken
         }
+        gear {
+          nextToken
+        }
+        createdAt
+        updatedAt
       }
       nextToken
     }
@@ -87,6 +110,8 @@ export const getActivity = /* GraphQL */ `
       sport
       rawMeasurementsS3FileKey
       description
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -109,6 +134,41 @@ export const listActivitys = /* GraphQL */ `
         sport
         rawMeasurementsS3FileKey
         description
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getGear = /* GraphQL */ `
+  query GetGear($id: ID!) {
+    getGear(id: $id) {
+      id
+      userID
+      brand
+      model
+      datePurchased
+      isEquipped
+      distance
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listGears = /* GraphQL */ `
+  query ListGears($filter: ModelGearFilterInput, $limit: Int, $nextToken: String) {
+    listGears(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        userID
+        brand
+        model
+        datePurchased
+        isEquipped
+        distance
+        createdAt
+        updatedAt
       }
       nextToken
     }

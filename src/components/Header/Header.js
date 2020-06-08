@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Collapse, Navbar, NavbarToggler, Nav, NavItem, NavLink } from 'reactstrap';
 import { NavLink as RRNavLink } from 'react-router-dom';
 import './Header.scss';
-import logo from './logo-sufferpal.png';
+import logo from '../../assets/logo-sufferpal.png';
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,11 +20,6 @@ const Header = () => {
             <NavItem>
               <NavLink id="font-list" tag={RRNavLink} exact to="/profile">
                 Profile
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink id="font-list" tag={RRNavLink} exact to="/calendar">
-                Calendar
               </NavLink>
             </NavItem>
           </Nav>

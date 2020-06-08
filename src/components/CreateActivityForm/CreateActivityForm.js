@@ -1,15 +1,17 @@
 import React, { useCallback, useState } from 'react';
+import PropTypes from 'prop-types';
 import { useDropzone } from 'react-dropzone';
 import { API, graphqlOperation } from 'aws-amplify';
 import Storage from '@aws-amplify/storage';
-import { createActivity } from '../../graphql/mutations';
+import { createActivity, updateGear } from '../../graphql/mutations';
+import { listGears } from '../../graphql/queries';
 import FitParser from 'fit-file-parser';
 import { useSelector } from 'react-redux';
 import { Button, Form, FormGroup, Label, Input, FormText, Alert } from 'reactstrap';
 import SufferPalLogo from '../../assets/logo-sufferpal.png';
 import './CreateActivityForm.scss';
 
-const CreateActivityForm = () => {
+const CreateActivityForm = ({ fetchUser }) => {
   const [activity, setActivity] = useState({});
   const userID = useSelector((state) => state.user.id);
   const [activityDescription, setActivityDescription] = useState('');
@@ -54,9 +56,40 @@ const CreateActivityForm = () => {
     await API.graphql(graphqlOperation(createActivity, { input: activity }));
   };
 
+  const updateGearData = async (gearData) => {
+    await API.graphql(graphqlOperation(updateGear, { input: gearData }));
+  };
+
+  const listGear = async () => {
+    return await API.graphql(graphqlOperation(listGears, { filter: { userID: { eq: userID } } }));
+  };
+
   const handleCreateActivityFormSubmit = (event) => {
     event.preventDefault();
     event.target.reset();
+
+    listGear().then((result) => {
+      const gearArray = result.data.listGears.items;
+
+      let equippedGearID = '';
+      let equippedGearDistance = 0;
+
+      for (let i = 0; i < gearArray.length; i += 1) {
+        if (gearArray[i].isEquipped) {
+          equippedGearID = gearArray[i].id;
+          equippedGearDistance = gearArray[i].distance;
+        }
+      }
+
+      const newTotalDistance = equippedGearDistance + activity?.sessions[0]?.total_distance;
+      const updatedGearData = {
+        userID,
+        id: equippedGearID,
+        distance: newTotalDistance,
+      };
+
+      updateGearData(updatedGearData);
+    });
 
     setActivityDescription('');
     setActivity({});
@@ -98,6 +131,7 @@ const CreateActivityForm = () => {
         addActivity(customActivityData).then(() => {
           setIsCreateActivitySuccessful(true);
           setIsCreateSuccessAlertOpen(true);
+          fetchUser();
         });
       });
     }
@@ -170,6 +204,10 @@ const CreateActivityForm = () => {
       </Form>
     </div>
   );
+};
+
+CreateActivityForm.propTypes = {
+  fetchUser: PropTypes.func.isRequired,
 };
 
 export default CreateActivityForm;

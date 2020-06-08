@@ -29,8 +29,24 @@ export const calculatePace = (time, distance) => {
 
   const timeInMinutes = time / 60;
   const pace = timeInMinutes / distance;
-  return parseFloat(pace.toFixed(2));
+  const paceTwoDecimals = pace.toFixed(2);
+  const paceString = paceTwoDecimals.toString();
+  const paceSplitMin = paceString.split('.')[0];
+  const paceSeconds = '.' + paceString.split('.')[1];
+  const paceInSeconds = paceSeconds * 60;
+  const seconds = paceInSeconds.toFixed(2).toString();
+  const secondsRounded = seconds.split('.')[0];
+  //const finalPace = (paceSplitMin + ':' + secondsRounded).toString();
+  if (seconds < 10) {
+    return (paceSplitMin + ':0' + secondsRounded).toString();
+  }
+
+  //const secondsRounded = seconds.split('.')[0];
+  const finalPace = (paceSplitMin + ':' + secondsRounded).toString();
+
+  return finalPace;
 };
+
 // this function creates custom time on activity card
 export const createCustomTimeString = (time) => {
   if (!time) {
@@ -74,7 +90,6 @@ export const getSplitNumberArray = (time) => {
 };
 
 export const setMapCenterCoordinates = (coordinates) => {
-  console.log(coordinates);
   const length = coordinates.length;
   let sumLat = 0;
   let sumLong = 0;
@@ -83,4 +98,52 @@ export const setMapCenterCoordinates = (coordinates) => {
     sumLong += coordinates[i][0];
   }
   return [sumLong / length, sumLat / length];
+};
+
+export const mileSplits = (rawMeasurement) => {
+  let mileNumber = 0;
+  let startTime = 0;
+  let currentTime = 0;
+  let currentMileTime = 0;
+  let mileIt = 0;
+  let recordNumber = 0;
+  let totalSpeed = 0;
+  let totalHeartRate = 0;
+  let totalCadence = 0;
+  const splits = [];
+
+  for (let i = 1; i < rawMeasurement.length; i += 1) {
+    recordNumber = recordNumber + 1;
+    if (rawMeasurement[i].speed !== null && rawMeasurement[i].speed !== undefined) {
+      totalSpeed = totalSpeed + rawMeasurement[i].speed;
+    }
+    if (rawMeasurement[i].heart_rate !== null && rawMeasurement[i].heart_rate !== undefined) {
+      totalHeartRate = totalHeartRate + rawMeasurement[i].heart_rate;
+    }
+    if (rawMeasurement[i].cadence !== null && rawMeasurement[i].cadence !== undefined) {
+      totalCadence = totalCadence + rawMeasurement[i].cadence;
+    }
+
+    if (rawMeasurement[i].distance >= mileIt + 1) {
+      mileIt = mileIt + 1;
+      currentTime = rawMeasurement[i].elapsed_time;
+      currentMileTime = currentTime - startTime;
+      startTime = currentTime;
+
+      mileNumber = mileNumber + 1;
+      splits.push({
+        id: i,
+        mile: mileNumber,
+        mileTime: currentMileTime,
+        avgSpeed: totalSpeed / recordNumber,
+        avgHR: totalHeartRate / recordNumber,
+        avgCadence: (totalCadence / recordNumber) * 2,
+      });
+      recordNumber = 0;
+      totalSpeed = 0;
+      totalHeartRate = 0;
+      totalCadence = 0;
+    }
+  }
+  return splits;
 };
