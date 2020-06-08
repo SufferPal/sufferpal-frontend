@@ -39,7 +39,7 @@ const ViewGearModal = ({ fetchUser, toggleViewGearModal, isModalOpen, gear, equi
     const { id: oldEquippedGearID } = equippedGear;
     const { id: newEquippedGearID } = newEquippedGear;
 
-    if (oldEquippedGearID !== newEquippedGearID) {
+    if (newEquippedGearID) {
       updateEquippedGear(oldEquippedGearID, newEquippedGearID).then(() => {
         fetchUser();
       });
