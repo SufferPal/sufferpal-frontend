@@ -21,7 +21,9 @@ const ViewGearModal = ({ fetchUser, toggleViewGearModal, isModalOpen, gear, equi
   };
 
   const updateEquippedGear = async (oldEquippedGearID, newEquippedGearID) => {
-    await API.graphql(graphqlOperation(updateGear, { input: { id: oldEquippedGearID, isEquipped: false } }));
+    if (oldEquippedGearID) {
+      await API.graphql(graphqlOperation(updateGear, { input: { id: oldEquippedGearID, isEquipped: false } }));
+    }
     await API.graphql(graphqlOperation(updateGear, { input: { id: newEquippedGearID, isEquipped: true } }));
   };
 
