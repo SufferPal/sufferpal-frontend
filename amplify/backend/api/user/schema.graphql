@@ -15,6 +15,7 @@ type User @model {
   bestTime1K: Float
   bestTime1Mile: Float
   activities: [Activity] @connection(keyName: "byUser", fields: ["id"])
+  gear: [Gear] @connection(keyName: "byUser", fields: ["id"])
 }
 
 type Activity @model @key(name: "byUser", fields: ["userID"]) {
@@ -33,4 +34,14 @@ type Activity @model @key(name: "byUser", fields: ["userID"]) {
   sport: String
   rawMeasurementsS3FileKey: String
   description: String
+}
+
+type Gear @model @key(name: "byUser", fields: ["userID"]) {
+  id: ID!
+  userID: ID!
+  brand: String
+  model: String
+  datePurchased: String
+  isEquipped: Boolean
+  distance: Float
 }
