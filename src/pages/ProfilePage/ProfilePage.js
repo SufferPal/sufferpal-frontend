@@ -44,12 +44,11 @@ const ProfilePage = () => {
         setIsModalButtonDisabled(false);
       }
 
-      if (userProfilePictureS3Key !== profilePictureS3Key) {
-        dispatch(setProfilePictureS3Key(userProfilePictureS3Key));
-        Storage.get(userProfilePictureS3Key).then((result) => {
-          dispatch(setProfilePictureHref(result));
-        });
-      }
+      dispatch(setProfilePictureS3Key(userProfilePictureS3Key));
+
+      Storage.get(userProfilePictureS3Key).then((result) => {
+        dispatch(setProfilePictureHref(result));
+      });
     } catch (error) {
       console.log(error);
     }
