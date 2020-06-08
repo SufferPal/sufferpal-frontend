@@ -41,7 +41,7 @@ const ProfileCard = ({ userData, fetchUser, equippedGear, isModalButtonDisabled 
                   <td>{weight}</td>
                 </tr>
                 <tr>
-                  <th scope="row">Birthday:</th>
+                  <th scope="row">Age:</th>
                   <td>{age}</td>
                 </tr>
                 <tr>
